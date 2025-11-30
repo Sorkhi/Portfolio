@@ -1,311 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Saeid Sorkhi — Portfolio 2025</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Saeid Sorkhi — Portfolio 2025</title>
 
-  <!-- JetBrains Mono -->
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+  * { box-sizing: border-box; }
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-    }
+  body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff; /* کاملاً سفید */
+    font-family: "JetBrains Mono", monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
 
-    body {
-      background: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: "JetBrains Mono", monospace;
-    }
+  .page {
+    position: relative;
+    width: min(92vw,1400px);
+    aspect-ratio: 1801/1080;
+    background: #ffffff; /* صفحه سفید */
+  }
 
-    /* صفحه با نسبت دقیق 1801x1080 */
-    .page {
-      position: relative;
-      width: min(92vw, 1400px);
-      aspect-ratio: 1801 / 1080;
-      background: #ffffff;
-    }
+  /* فریم */
+  .frame-line {
+    position: absolute;
+    background: #000; /* ثابت و مشکی */
+  }
 
-    /* --------- فریم بر اساس مختصات SVG --------- */
+  /* گوشه بالا چپ */
+  .frame-top-left-h { top:5.55%; left:3.33%; width:1.92%; height:3px; }
+  .frame-top-left-v { top:5.55%; left:3.33%; width:3px; height:3.17%; }
 
-    .frame-line {
-      position: absolute;
-      background: #000;
-    }
+  /* گوشه بالا راست */
+  .frame-top-right-h { top:5.55%; right:3.33%; width:1.92%; height:3px; }
+  .frame-top-right-v { top:5.55%; right:3.33%; width:3px; height:3.17%; }
 
-    /* گوشه‌ی بالا-چپ */
-    .frame-top-left-h {
-      top: 5.5556%;
-      left: 3.3315%;
-      width: 1.9220%;
-      height: 3px;
-    }
-    .frame-top-left-v {
-      top: 5.5556%;
-      left: 3.3315%;
-      width: 3px;
-      height: 3.1746%;
-    }
+  /* پایین چپ */
+  .frame-bottom-left-h { bottom:5.55%; left:3.33%; width:1.92%; height:3px; }
+  .frame-bottom-left-v { bottom:5.55%; left:3.33%; width:3px; height:3.17%; }
 
-    /* گوشه‌ی بالا-راست */
-    .frame-top-right-h {
-      top: 5.5556%;
-      right: 3.3315%;
-      width: 1.9223%;
-      height: 3px;
-    }
-    .frame-top-right-v {
-      top: 5.5556%;
-      right: 3.3315%;
-      width: 3px;
-      height: 3.1746%;
-    }
+  /* پایین راست */
+  .frame-bottom-right-h { bottom:5.55%; right:3.33%; width:1.92%; height:3px; }
+  .frame-bottom-right-v { bottom:5.55%; right:3.33%; width:3px; height:3.17%; }
 
-    /* گوشه‌ی پایین-چپ */
-    .frame-bottom-left-h {
-      bottom: 5.5556%;
-      left: 3.3315%;
-      width: 1.9220%;
-      height: 3px;
-    }
-    .frame-bottom-left-v {
-      bottom: 5.5556%;
-      left: 3.3315%;
-      width: 3px;
-      height: 3.1746%;
-    }
+  /* وسط چپ */
+  .frame-mid-left-v-top { left:3.33%; top:47.28%; width:3px; height:2.72%; }
+  .frame-mid-left-v-bottom { left:3.33%; top:50%; width:3px; height:2.72%; }
+  .frame-mid-left-h { left:3.33%; top:50%; width:1.92%; height:3px; }
 
-    /* گوشه‌ی پایین-راست */
-    .frame-bottom-right-h {
-      bottom: 5.5556%;
-      right: 3.3315%;
-      width: 1.9223%;
-      height: 3px;
-    }
-    .frame-bottom-right-v {
-      bottom: 5.5556%;
-      right: 3.3315%;
-      width: 3px;
-      height: 3.1746%;
-    }
+  /* وسط راست */
+  .frame-mid-right-v-top { right:3.33%; top:47.28%; width:3px; height:2.72%; }
+  .frame-mid-right-v-bottom { right:3.33%; top:50%; width:3px; height:2.72%; }
+  .frame-mid-right-h { right:3.33%; top:50%; width:1.92%; height:3px; }
 
-    /* تکه‌های وسطِ کناره چپ و راست (در ارتفاع ۵۰٪ صفحه، مثل SVG) */
+  /* منو بالا */
+  nav {
+    position: absolute;
+    top: 9.5%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    letter-spacing: 0.35em;
+  }
+  nav a {
+    color: #000;
+    text-decoration: none;
+    margin: 0 18px;
+  }
 
-    /* وسطِ چپ */
-    .frame-mid-left-v-top {
-      left: 3.3315%;
-      top: 47.2789%;
-      width: 3px;
-      height: 2.7211%;
-    }
-    .frame-mid-left-v-bottom {
-      left: 3.3315%;
-      top: 50%;
-      width: 3px;
-      height: 2.7211%;
-    }
-    .frame-mid-left-h {
-      left: 3.3315%;
-      top: 50%;
-      width: 1.9220%;
-      height: 3px;
-    }
+  /* بخش مرکزی — دو ستونه */
+  .hero {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-45%);
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+  }
 
-    /* وسطِ راست */
-    .frame-mid-right-v-top {
-      right: 3.3315%;
-      top: 47.2789%;
-      width: 3px;
-      height: 2.7211%;
-    }
-    .frame-mid-right-v-bottom {
-      right: 3.3315%;
-      top: 50%;
-      width: 3px;
-      height: 2.7211%;
-    }
-    .frame-mid-right-h {
-      right: 3.3315%;
-      top: 50%;
-      width: 1.9223%;
-      height: 3px;
-    }
+  .col {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
 
-    /* --------- منو بالای صفحه --------- */
+  .left-col {
+    width: 55%;
+  }
 
-    nav {
-      position: absolute;
-      top: 9.5%;          /* کمی زیر فریم بالا */
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 11px;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
+  .right-col {
+    width: 35%;
+    align-items: flex-end; /* راست‌چین مثل PDF */
+    text-align: right;
+  }
 
-    nav a {
-      text-decoration: none;
-      color: #000;
-      margin: 0 18px;
-    }
+  .title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    margin-bottom: 6px;
+  }
 
-    /* --------- بلوک مرکزی متن --------- */
+  .subtitle {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    margin-bottom: 6px;
+  }
 
-    .hero {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -44%); /* کمی بالاتر از وسط، نزدیک به طرح PDF */
-      text-align: center;
-      width: 60%;
-      min-width: 420px;
-    }
+  .edu-line {
+    font-size: 10px;
+    opacity: 0.8;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
 
-    .hero-name {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      margin-bottom: 6px;
-    }
+  /* Divider بین ستون‌ها */
+  .divider {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-10%);
+    width: 1px;
+    height: 110px;
+    background: #000;
+  }
 
-    .hero-role {
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      color: #000;
-      margin-bottom: 4px;
-    }
+  /* راست ستون */
+  .resume {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+  .portfolio {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    margin-bottom: 6px;
+  }
+  .year {
+    font-size: 16px;
+    letter-spacing: 0.25em;
+  }
 
-    .hero-edu {
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      opacity: 0.78;
-      margin-bottom: 26px;
-    }
-
-    .hero-divider {
-      width: 1px;
-      height: 56px;
-      background: #000;
-      margin: 0 auto 22px auto;
-    }
-
-    .hero-resume {
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      margin-bottom: 4px;
-    }
-
-    .hero-portfolio {
-      font-size: 34px;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      margin-bottom: 4px;
-    }
-
-    .hero-year {
-      font-size: 16px;
-      letter-spacing: 0.25em;
-    }
-
-    /* --------- واکنش‌گرا برای عرض‌های کوچک --------- */
-
-    @media (max-width: 768px) {
-      .page {
-        width: 100vw;
-      }
-
-      nav {
-        top: 8%;
-        font-size: 9px;
-        letter-spacing: 0.25em;
-      }
-
-      nav a {
-        margin: 0 10px;
-      }
-
-      .hero {
-        width: 80%;
-        min-width: 0;
-        transform: translate(-50%, -42%);
-      }
-
-      .hero-name {
-        font-size: 18px;
-        letter-spacing: 0.15em;
-      }
-
-      .hero-portfolio {
-        font-size: 26px;
-        letter-spacing: 0.18em;
-      }
-
-      .hero-year {
-        font-size: 13px;
-      }
-
-      .hero-divider {
-        height: 40px;
-      }
-    }
-  </style>
+  /* ریسپانسیو ساده */
+  @media(max-width:900px){
+    .hero { flex-direction: column; text-align: center; }
+    .left-col, .right-col { width: 100%; align-items: center; text-align: center; }
+    .divider { display:none; }
+  }
+</style>
 </head>
+
 <body>
 
-  <div class="page">
-    <!-- فریم -->
-    <div class="frame-line frame-top-left-h"></div>
-    <div class="frame-line frame-top-left-v"></div>
+<div class="page">
 
-    <div class="frame-line frame-top-right-h"></div>
-    <div class="frame-line frame-top-right-v"></div>
+  <!-- فریم -->
+  <div class="frame-top-left-h frame-line"></div>
+  <div class="frame-top-left-v frame-line"></div>
 
-    <div class="frame-line frame-bottom-left-h"></div>
-    <div class="frame-line frame-bottom-left-v"></div>
+  <div class="frame-top-right-h frame-line"></div>
+  <div class="frame-top-right-v frame-line"></div>
 
-    <div class="frame-line frame-bottom-right-h"></div>
-    <div class="frame-line frame-bottom-right-v"></div>
+  <div class="frame-bottom-left-h frame-line"></div>
+  <div class="frame-bottom-left-v frame-line"></div>
 
-    <div class="frame-line frame-mid-left-v-top"></div>
-    <div class="frame-line frame-mid-left-v-bottom"></div>
-    <div class="frame-line frame-mid-left-h"></div>
+  <div class="frame-bottom-right-h frame-line"></div>
+  <div class="frame-bottom-right-v frame-line"></div>
 
-    <div class="frame-line frame-mid-right-v-top"></div>
-    <div class="frame-line frame-mid-right-v-bottom"></div>
-    <div class="frame-line frame-mid-right-h"></div>
+  <div class="frame-mid-left-v-top frame-line"></div>
+  <div class="frame-mid-left-v-bottom frame-line"></div>
+  <div class="frame-mid-left-h frame-line"></div>
 
-    <!-- منو بالا (بعداً می‌تونی لینک‌ها رو واقعی کنی) -->
-    <nav>
-      <a href="#">HOME</a>
-      <a href="#">RESEARCH</a>
-      <a href="#">ABOUT</a>
-      <a href="#">CONTACT</a>
-    </nav>
+  <div class="frame-mid-right-v-top frame-line"></div>
+  <div class="frame-mid-right-v-bottom frame-line"></div>
+  <div class="frame-mid-right-h frame-line"></div>
 
-    <!-- بلوک اصلی وسط صفحه -->
-    <div class="hero">
-      <div class="hero-name">SAEID SORKHI</div>
-      <div class="hero-role">RESEARCHER &amp; DIGITAL DESIGNER</div>
-      <div class="hero-edu">M.A. VISUAL COMMUNICATION — B. ARCHITECTURE</div>
+  <!-- منو -->
+  <nav>
+    <a href="#">HOME</a>
+    <a href="#">RESEARCH</a>
+    <a href="#">ABOUT</a>
+    <a href="#">CONTACT</a>
+  </nav>
 
-      <div class="hero-divider"></div>
+  <!-- متن دو ستونه -->
+  <div class="hero">
+    <div class="left-col col">
+      <div class="title">SAEID SORKHI</div>
+      <div class="subtitle">RESEARCHER & DIGITAL DESIGNER</div>
+      <div class="edu-line">M.A. VISUAL COMMUNICATION</div>
+      <div class="edu-line">B. ARCHITECTURE</div>
+    </div>
 
-      <div class="hero-resume">Résumé +</div>
-      <div class="hero-portfolio">PORTFOLIO</div>
-      <div class="hero-year">2025</div>
+    <div class="right-col col">
+      <div class="resume">Résumé +</div>
+      <div class="portfolio">PORTFOLIO</div>
+      <div class="year">2025</div>
     </div>
   </div>
+
+  <div class="divider"></div>
+
+</div>
 
 </body>
 </html>
