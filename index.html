@@ -2,75 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Saeid Sorkhi — Portfolio 2025</title>
-
-  <!-- فونت برای وقتی بعداً صفحه‌های دیگه اضافه می‌کنی -->
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <title>Portfolio</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta
-    name="description"
-    content="Saeid Sorkhi — Researcher & Digital Designer. Portfolio 2025, visual communication and architecture background, contact and work showcase."
-  />
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
     body {
       margin: 0;
       padding: 0;
-      height: 100%;
-    }
-
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
       background: #ffffff;
-      font-family: "JetBrains Mono", monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
     }
 
-    /* ظرف واکنش‌گرا برای SVG با نسبت تصویر اصلی (1801×1080) */
-    .frame-wrapper {
-      width: min(100vw - 40px, (100vh - 40px) * 1801 / 1080);
-      max-width: 1801px;
+    /* ظرف کلی که قاب و محتوا داخلش قرار می‌گیرند */
+    .container {
+      position: relative;
+      width: min(90vw, 1600px);
+      aspect-ratio: 1801 / 1080; /* نسبت Home.svg */
     }
 
-    .frame-wrapper img {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-
-    /* متن سئو / قابل‌انتخاب ولی خارج از دید کاربر */
-    .seo-text {
+    /* قاب دور (Frame.svg) */
+    .frame {
       position: absolute;
-      left: -9999px;
-      top: auto;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      white-space: nowrap;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* محتوای اصلی (Home.svg) */
+    .content {
+      position: absolute;
+      top: 3%;    /* فاصله از قاب – قابل تنظیم */
+      left: 3%;
+      width: 94%;
+      height: 94%;
+      object-fit: contain;
+      z-index: 1;
     }
   </style>
 </head>
+
 <body>
+  <div class="container">
 
-  <!-- خود طرح، پیکسلی دقیق همون SVG -->
-  <div class="frame-wrapper">
-    <img src="Home.svg" alt="Saeid Sorkhi Portfolio 2025 layout" />
+    <!-- محتوای اصلی (همان طرح دقیق تو) -->
+    <img src="Home.svg" class="content" alt="content" />
+
+    <!-- قاب دور -->
+    <img src="Frame.svg" class="frame" alt="frame" />
+
   </div>
-
-  <!-- متن واقعی برای SEO و انتخاب‌پذیر بودن، ولی دیده نمی‌شود -->
-  <div class="seo-text">
-    SAEID SORKHI — RESEARCHER &amp; DIGITAL DESIGNER — PORTFOLIO 2025.
-    Navigation: HOME, RESEARCH, ABOUT, CONTACT.
-    Education: M.A. Visual Communication, B. Architecture.
-    Résumé plus, Portfolio 2025.
-  </div>
-
 </body>
 </html>
