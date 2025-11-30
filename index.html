@@ -2,62 +2,310 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Portfolio</title>
-
+  <title>Saeid Sorkhi — Portfolio 2025</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <!-- JetBrains Mono -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+
   <style>
-    body {
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
       margin: 0;
       padding: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
       background: #ffffff;
       display: flex;
-      justify-content: center;
       align-items: center;
-      height: 100vh;
-      width: 100vw;
+      justify-content: center;
+      font-family: "JetBrains Mono", monospace;
     }
 
-    /* ظرف کلی که قاب و محتوا داخلش قرار می‌گیرند */
-    .container {
+    /* صفحه با نسبت دقیق 1801x1080 */
+    .page {
       position: relative;
-      width: min(90vw, 1600px);
-      aspect-ratio: 1801 / 1080; /* نسبت Home.svg */
+      width: min(92vw, 1400px);
+      aspect-ratio: 1801 / 1080;
+      background: #ffffff;
     }
 
-    /* قاب دور (Frame.svg) */
-    .frame {
+    /* --------- فریم بر اساس مختصات SVG --------- */
+
+    .frame-line {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 2;
+      background: #000;
     }
 
-    /* محتوای اصلی (Home.svg) */
-    .content {
+    /* گوشه‌ی بالا-چپ */
+    .frame-top-left-h {
+      top: 5.5556%;
+      left: 3.3315%;
+      width: 1.9220%;
+      height: 3px;
+    }
+    .frame-top-left-v {
+      top: 5.5556%;
+      left: 3.3315%;
+      width: 3px;
+      height: 3.1746%;
+    }
+
+    /* گوشه‌ی بالا-راست */
+    .frame-top-right-h {
+      top: 5.5556%;
+      right: 3.3315%;
+      width: 1.9223%;
+      height: 3px;
+    }
+    .frame-top-right-v {
+      top: 5.5556%;
+      right: 3.3315%;
+      width: 3px;
+      height: 3.1746%;
+    }
+
+    /* گوشه‌ی پایین-چپ */
+    .frame-bottom-left-h {
+      bottom: 5.5556%;
+      left: 3.3315%;
+      width: 1.9220%;
+      height: 3px;
+    }
+    .frame-bottom-left-v {
+      bottom: 5.5556%;
+      left: 3.3315%;
+      width: 3px;
+      height: 3.1746%;
+    }
+
+    /* گوشه‌ی پایین-راست */
+    .frame-bottom-right-h {
+      bottom: 5.5556%;
+      right: 3.3315%;
+      width: 1.9223%;
+      height: 3px;
+    }
+    .frame-bottom-right-v {
+      bottom: 5.5556%;
+      right: 3.3315%;
+      width: 3px;
+      height: 3.1746%;
+    }
+
+    /* تکه‌های وسطِ کناره چپ و راست (در ارتفاع ۵۰٪ صفحه، مثل SVG) */
+
+    /* وسطِ چپ */
+    .frame-mid-left-v-top {
+      left: 3.3315%;
+      top: 47.2789%;
+      width: 3px;
+      height: 2.7211%;
+    }
+    .frame-mid-left-v-bottom {
+      left: 3.3315%;
+      top: 50%;
+      width: 3px;
+      height: 2.7211%;
+    }
+    .frame-mid-left-h {
+      left: 3.3315%;
+      top: 50%;
+      width: 1.9220%;
+      height: 3px;
+    }
+
+    /* وسطِ راست */
+    .frame-mid-right-v-top {
+      right: 3.3315%;
+      top: 47.2789%;
+      width: 3px;
+      height: 2.7211%;
+    }
+    .frame-mid-right-v-bottom {
+      right: 3.3315%;
+      top: 50%;
+      width: 3px;
+      height: 2.7211%;
+    }
+    .frame-mid-right-h {
+      right: 3.3315%;
+      top: 50%;
+      width: 1.9223%;
+      height: 3px;
+    }
+
+    /* --------- منو بالای صفحه --------- */
+
+    nav {
       position: absolute;
-      top: 3%;    /* فاصله از قاب – قابل تنظیم */
-      left: 3%;
-      width: 94%;
-      height: 94%;
-      object-fit: contain;
-      z-index: 1;
+      top: 9.5%;          /* کمی زیر فریم بالا */
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #000;
+      margin: 0 18px;
+    }
+
+    /* --------- بلوک مرکزی متن --------- */
+
+    .hero {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -44%); /* کمی بالاتر از وسط، نزدیک به طرح PDF */
+      text-align: center;
+      width: 60%;
+      min-width: 420px;
+    }
+
+    .hero-name {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      margin-bottom: 6px;
+    }
+
+    .hero-role {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      color: #000;
+      margin-bottom: 4px;
+    }
+
+    .hero-edu {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      opacity: 0.78;
+      margin-bottom: 26px;
+    }
+
+    .hero-divider {
+      width: 1px;
+      height: 56px;
+      background: #000;
+      margin: 0 auto 22px auto;
+    }
+
+    .hero-resume {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      margin-bottom: 4px;
+    }
+
+    .hero-portfolio {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      margin-bottom: 4px;
+    }
+
+    .hero-year {
+      font-size: 16px;
+      letter-spacing: 0.25em;
+    }
+
+    /* --------- واکنش‌گرا برای عرض‌های کوچک --------- */
+
+    @media (max-width: 768px) {
+      .page {
+        width: 100vw;
+      }
+
+      nav {
+        top: 8%;
+        font-size: 9px;
+        letter-spacing: 0.25em;
+      }
+
+      nav a {
+        margin: 0 10px;
+      }
+
+      .hero {
+        width: 80%;
+        min-width: 0;
+        transform: translate(-50%, -42%);
+      }
+
+      .hero-name {
+        font-size: 18px;
+        letter-spacing: 0.15em;
+      }
+
+      .hero-portfolio {
+        font-size: 26px;
+        letter-spacing: 0.18em;
+      }
+
+      .hero-year {
+        font-size: 13px;
+      }
+
+      .hero-divider {
+        height: 40px;
+      }
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
 
-    <!-- محتوای اصلی (همان طرح دقیق تو) -->
-    <img src="Home.svg" class="content" alt="content" />
+  <div class="page">
+    <!-- فریم -->
+    <div class="frame-line frame-top-left-h"></div>
+    <div class="frame-line frame-top-left-v"></div>
 
-    <!-- قاب دور -->
-    <img src="Frame.svg" class="frame" alt="frame" />
+    <div class="frame-line frame-top-right-h"></div>
+    <div class="frame-line frame-top-right-v"></div>
 
+    <div class="frame-line frame-bottom-left-h"></div>
+    <div class="frame-line frame-bottom-left-v"></div>
+
+    <div class="frame-line frame-bottom-right-h"></div>
+    <div class="frame-line frame-bottom-right-v"></div>
+
+    <div class="frame-line frame-mid-left-v-top"></div>
+    <div class="frame-line frame-mid-left-v-bottom"></div>
+    <div class="frame-line frame-mid-left-h"></div>
+
+    <div class="frame-line frame-mid-right-v-top"></div>
+    <div class="frame-line frame-mid-right-v-bottom"></div>
+    <div class="frame-line frame-mid-right-h"></div>
+
+    <!-- منو بالا (بعداً می‌تونی لینک‌ها رو واقعی کنی) -->
+    <nav>
+      <a href="#">HOME</a>
+      <a href="#">RESEARCH</a>
+      <a href="#">ABOUT</a>
+      <a href="#">CONTACT</a>
+    </nav>
+
+    <!-- بلوک اصلی وسط صفحه -->
+    <div class="hero">
+      <div class="hero-name">SAEID SORKHI</div>
+      <div class="hero-role">RESEARCHER &amp; DIGITAL DESIGNER</div>
+      <div class="hero-edu">M.A. VISUAL COMMUNICATION — B. ARCHITECTURE</div>
+
+      <div class="hero-divider"></div>
+
+      <div class="hero-resume">Résumé +</div>
+      <div class="hero-portfolio">PORTFOLIO</div>
+      <div class="hero-year">2025</div>
+    </div>
   </div>
+
 </body>
 </html>
