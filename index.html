@@ -2,175 +2,74 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Saeid Sorkhi — Portfolio</title>
+  <title>Saeid Sorkhi — Portfolio 2025</title>
 
-  <!-- JetBrains Mono -->
+  <!-- فونت برای وقتی بعداً صفحه‌های دیگه اضافه می‌کنی -->
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      margin: 0;
-      background: #ffffff;
-      font-family: "JetBrains Mono", monospace;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-    }
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Saeid Sorkhi — Researcher & Digital Designer. Portfolio 2025, visual communication and architecture background, contact and work showcase."
+  />
 
-    /* قاب کلی — واکنش‌گرا و کشسان */
-    .frame {
-      width: min(88vw, 1400px);
-      padding: 80px 100px;
-      border: 3px solid #000;
-      position: relative;
+  <style>
+    * {
       box-sizing: border-box;
     }
 
-    /* گوشه‌ها — مشابه SVG */
-    .corner {
-      width: 36px;
-      height: 36px;
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    /* ظرف واکنش‌گرا برای SVG با نسبت تصویر اصلی (1801×1080) */
+    .frame-wrapper {
+      width: min(100vw - 40px, (100vh - 40px) * 1801 / 1080);
+      max-width: 1801px;
+    }
+
+    .frame-wrapper img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* متن سئو / قابل‌انتخاب ولی خارج از دید کاربر */
+    .seo-text {
       position: absolute;
-      border: 3px solid black;
-    }
-
-    .top-left {
-      top: -3px; left: -3px;
-      border-right: none; border-bottom: none;
-    }
-    .top-right {
-      top: -3px; right: -3px;
-      border-left: none; border-bottom: none;
-    }
-    .bottom-left {
-      bottom: -3px; left: -3px;
-      border-right: none; border-top: none;
-    }
-    .bottom-right {
-      bottom: -3px; right: -3px;
-      border-left: none; border-top: none;
-    }
-
-    /* منوی بالا */
-    nav {
-      text-align: center;
-      letter-spacing: 8px;
-      margin-bottom: 110px;
-      font-size: 13px;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #000;
-      margin: 0 24px;
-    }
-
-    /* محتوای مرکزی */
-    .center {
-      text-align: center;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    .name {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
-    }
-
-    .subtitle {
-      color: #b33;
-      letter-spacing: 1px;
-      font-size: 13px;
-      margin-bottom: 4px;
-    }
-
-    .edu {
-      opacity: 0.7;
-      font-size: 11px;
-      margin-bottom: 30px;
-    }
-
-    .divider {
-      height: 60px;
-      width: 2px;
-      background: black;
-      margin: 28px auto;
-    }
-
-    .resume {
-      font-size: 14px;
-      opacity: 0.7;
-      margin-bottom: 4px;
-    }
-
-    .portfolio-title {
-      font-size: 40px;
-      font-weight: 700;
-      letter-spacing: 4px;
-    }
-
-    .year {
-      font-size: 18px;
-      letter-spacing: 4px;
-      margin-top: 6px;
-    }
-
-    /* ریسپانسیو موبایل */
-    @media (max-width: 650px) {
-      .frame {
-        padding: 60px 40px;
-      }
-      nav {
-        letter-spacing: 4px;
-        font-size: 11px;
-      }
-      .portfolio-title {
-        font-size: 30px;
-      }
-      .divider {
-        height: 40px;
-      }
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      white-space: nowrap;
     }
   </style>
 </head>
-
 <body>
 
-  <div class="frame">
+  <!-- خود طرح، پیکسلی دقیق همون SVG -->
+  <div class="frame-wrapper">
+    <img src="Home.svg" alt="Saeid Sorkhi Portfolio 2025 layout" />
+  </div>
 
-    <!-- گوشه‌های قاب -->
-    <div class="corner top-left"></div>
-    <div class="corner top-right"></div>
-    <div class="corner bottom-left"></div>
-    <div class="corner bottom-right"></div>
-
-    <!-- منو -->
-    <nav>
-      <a href="#">HOME</a>
-      <a href="#">RESEARCH</a>
-      <a href="#">ABOUT</a>
-      <a href="#">CONTACT</a>
-    </nav>
-
-    <!-- متن مرکزی -->
-    <div class="center">
-      <div class="name">SAEID SORKHI</div>
-      <div class="subtitle">RESEARCHER & DIGITAL DESIGNER</div>
-      <div class="edu">
-        M.A. VISUAL COMMUNICATION — B. ARCHITECTURE
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="resume">Résumé +</div>
-
-      <div class="portfolio-title">PORTFOLIO</div>
-      <div class="year">2025</div>
-    </div>
-
+  <!-- متن واقعی برای SEO و انتخاب‌پذیر بودن، ولی دیده نمی‌شود -->
+  <div class="seo-text">
+    SAEID SORKHI — RESEARCHER &amp; DIGITAL DESIGNER — PORTFOLIO 2025.
+    Navigation: HOME, RESEARCH, ABOUT, CONTACT.
+    Education: M.A. Visual Communication, B. Architecture.
+    Résumé plus, Portfolio 2025.
   </div>
 
 </body>
