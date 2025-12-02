@@ -259,3 +259,62 @@ body {
     display: none;
   }
 }
+
+/* ---------------------------
+   RESPONSIVE FRAME (percent-based)
+---------------------------- */
+
+.frame-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Base line thickness */
+.corner, .side {
+  position: absolute;
+  background: black;
+  width: 0.25vw;    /* ضخامت خط به صورت درصدی */
+}
+
+/* گوشه‌ها */
+.corner {
+  height: 4vh;     /* طول خط عمودی */
+}
+
+.corner::after {
+  content: "";
+  position: absolute;
+  height: 0.25vw;   /* ضخامت خط افقی */
+  width: 4vh;       /* طول خط افقی */
+  background: black;
+}
+
+/* TL */
+.corner.tl { top: 2%; left: 2%; }
+.corner.tl::after { top: 0; left: 0; }
+
+/* TR */
+.corner.tr { top: 2%; right: 2%; }
+.corner.tr::after { top: 0; right: 0; }
+
+/* BL */
+.corner.bl { bottom: 2%; left: 2%; }
+.corner.bl::after { bottom: 0; left: 0; }
+
+/* BR */
+.corner.br { bottom: 2%; right: 2%; }
+.corner.br::after { bottom: 0; right: 0; }
+
+/* بریدگی‌های چپ و راست (وسط) */
+.side {
+  height: 3vh;
+}
+
+/* Left */
+.side.left-top    { left: 2%; top: 35%; }
+.side.left-bottom { left: 2%; top: 50%; }
+
+/* Right */
+.side.right-top    { right: 2%; top: 35%; }
+.side.right-bottom { right: 2%; top: 50%; }
