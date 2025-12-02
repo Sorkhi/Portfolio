@@ -1,0 +1,474 @@
+.home {
+  background-color: #ffffff !important;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1200px) {
+  .home {
+    padding: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home {
+    padding: 20px;
+  }
+}
+
+.home .frame {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  right: 40px;
+  bottom: 40px;
+  width: calc(100% - 80px);
+  height: calc(100% - 80px);
+  object-fit: contain;
+}
+
+@media (max-width: 1200px) {
+  .home .frame {
+    top: 30px;
+    left: 30px;
+    right: 30px;
+    bottom: 30px;
+    width: calc(100% - 60px);
+    height: calc(100% - 60px);
+  }
+}
+
+@media (max-width: 768px) {
+  .home .frame {
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+  }
+}
+
+.home .main-title {
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  width: 336px;
+  height: 174px;
+}
+
+@media (max-width: 1200px) {
+  .home .main-title {
+    left: 55%;
+    width: 280px;
+    height: 145px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home .main-title {
+    left: 50%;
+    top: 60%;
+    width: 200px;
+    height: 110px;
+  }
+}
+
+.home .element {
+  position: absolute;
+  top: 90px;
+  left: 0;
+  height: 84px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 300;
+  color: #000000;
+  font-size: 64px;
+  letter-spacing: -1.28px;
+  line-height: normal;
+}
+
+@media (max-width: 1200px) {
+  .home .element {
+    font-size: 52px;
+    top: 75px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home .element {
+    font-size: 38px;
+    top: 55px;
+    height: 50px;
+  }
+}
+
+.home .CV {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  height: 46px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 200;
+  color: #000000;
+  font-size: 35px;
+  letter-spacing: -0.70px;
+  line-height: normal;
+}
+
+@media (max-width: 1200px) {
+  .home .CV {
+    font-size: 28px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home .CV {
+    font-size: 20px;
+    height: 28px;
+  }
+}
+
+.home .portfolio {
+  position: absolute;
+  top: 34px;
+  left: 0;
+  height: 84px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 700;
+  color: #000000;
+  font-size: 64px;
+  letter-spacing: -1.28px;
+  line-height: normal;
+}
+
+@media (max-width: 1200px) {
+  .home .portfolio {
+    font-size: 52px;
+    top: 28px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home .portfolio {
+    font-size: 38px;
+    top: 20px;
+    height: 50px;
+  }
+}
+
+.home .scroll {
+  position: absolute;
+  top: 50px;
+  left: 42px;
+  width: 30px;
+  height: 108px;
+}
+
+@media (max-width: 1200px) {
+  .home .scroll {
+    width: 25px;
+    height: 90px;
+    top: 42px;
+    left: 35px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home .scroll {
+    width: 18px;
+    height: 65px;
+    top: 30px;
+    left: 25px;
+  }
+}
+
+.home .navbar {
+  display: flex;
+  width: 843px;
+  max-width: calc(100% - 160px);
+  align-items: baseline;
+  justify-content: space-between;
+  position: absolute;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 1200px) {
+  .home .navbar {
+    width: 700px;
+    max-width: calc(100% - 120px);
+    top: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home .navbar {
+    width: 100%;
+    max-width: calc(100% - 80px);
+    top: 80px;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+  }
+}
+
+.home .text-wrapper {
+  z-index: 3;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: fit-content;
+  margin-top: -1.00px;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 100;
+  color: #000000;
+  font-size: 24px;
+  letter-spacing: 9.60px;
+  line-height: normal;
+}
+
+@media (max-width: 1200px) {
+  .home .text-wrapper {
+    font-size: 20px;
+    letter-spacing: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home .text-wrapper {
+    font-size: 14px;
+    letter-spacing: 5px;
+  }
+}
+
+.home .research {
+  width: fit-content;
+  z-index: 2;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin-top: -1.00px;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 100;
+  color: #000000;
+  font-size: 24px;
+  letter-spacing: 9.60px;
+  line-height: normal;
+}
+
+@media (max-width: 1200px) {
+  .home .research {
+    font-size: 20px;
+    letter-spacing: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home .research {
+    font-size: 14px;
+    letter-spacing: 5px;
+  }
+}
+
+.home .about {
+  z-index: 1;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: fit-content;
+  margin-top: -1.00px;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 100;
+  color: #000000;
+  font-size: 24px;
+  letter-spacing: 9.60px;
+  line-height: normal;
+}
+
+@media (max-width: 1200px) {
+  .home .about {
+    font-size: 20px;
+    letter-spacing: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home .about {
+    font-size: 14px;
+    letter-spacing: 5px;
+  }
+}
+
+.home .contact {
+  width: fit-content;
+  z-index: 0;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin-top: -1.00px;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 100;
+  color: #000000;
+  font-size: 24px;
+  letter-spacing: 9.60px;
+  line-height: normal;
+}
+
+@media (max-width: 1200px) {
+  .home .contact {
+    font-size: 20px;
+    letter-spacing: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home .contact {
+    font-size: 14px;
+    letter-spacing: 5px;
+  }
+}
+
+.home .details {
+  display: inline-flex;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  align-items: flex-end;
+  justify-content: center;
+}
+
+@media (max-width: 1200px) {
+  .home .details {
+    left: 32%;
+  }
+}
+
+@media (max-width: 768px) {
+  .home .details {
+    left: 50%;
+    top: 35%;
+    align-items: center;
+  }
+}
+
+.home .div {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: fit-content;
+  margin-top: -1.00px;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 500;
+  color: #000000;
+  font-size: 40px;
+  text-align: right;
+  letter-spacing: -0.80px;
+  line-height: normal;
+}
+
+@media (max-width: 1200px) {
+  .home .div {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home .div {
+    font-size: 24px;
+    text-align: center;
+  }
+}
+
+.home .RESEARCHER-DIGITAL {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: fit-content;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 300;
+  color: #d2232a;
+  font-size: 24px;
+  text-align: right;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+@media (max-width: 1200px) {
+  .home .RESEARCHER-DIGITAL {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home .RESEARCHER-DIGITAL {
+    font-size: 16px;
+    text-align: center;
+  }
+}
+
+.home .text-wrapper-2 {
+  position: relative;
+  display: flex;
+  width: fit-content;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 100;
+  color: #000000;
+  font-size: 24px;
+  text-align: right;
+  letter-spacing: -0.48px;
+  line-height: normal;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+@media (max-width: 1200px) {
+  .home .text-wrapper-2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home .text-wrapper-2 {
+    font-size: 16px;
+    text-align: center;
+  }
+}
+
+.home .vertical-line {
+  position: absolute;
+  width: 0;
+  height: 13.70%;
+  top: 41.67%;
+  left: 50.06%;
+}
+
+@media (max-width: 768px) {
+  .home .vertical-line {
+    display: none;
+  }
+}
