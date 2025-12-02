@@ -318,3 +318,20 @@ body {
 /* Right */
 .side.right-top    { right: 2%; top: 35%; }
 .side.right-bottom { right: 2%; top: 50%; }
+
+/* ---------------------------
+   RESPONSIVE VERTICAL LINE
+---------------------------- */
+
+.vertical-divider {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;              /* ضخامت خط */
+  height: 30vh;            /* طول خط (ریسپانسیو) */
+  background: black;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.9;
+}
+
