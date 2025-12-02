@@ -25,6 +25,28 @@ body {
   object-fit: contain;
 }
 
+/* استایل منوی بالا */
+.navbar {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  position: absolute;
+  top: 20px;
+  width: 100%;
+}
+
+.navbar-link {
+  color: #000;
+  text-decoration: none;
+  font-size: 18px;
+  font-family: "JetBrains Mono", sans-serif;
+}
+
+.navbar-link:hover {
+  color: #d2232a; /* تغییر رنگ لینک‌ها هنگام هاور */
+}
+
+/* استایل عنوان و سایر بخش‌ها */
 .home .main-title {
   position: absolute;
   top: 50%;
