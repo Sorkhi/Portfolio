@@ -1,215 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Saeid Sorkhi — Portfolio 2025</title>
-
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-<style>
-  * { box-sizing: border-box; }
-
-  body {
-    margin: 0;
-    padding: 0;
-    background: #ffffff; /* کاملاً سفید */
-    font-family: "JetBrains Mono", monospace;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-  }
-
-  .page {
-    position: relative;
-    width: min(92vw,1400px);
-    aspect-ratio: 1801/1080;
-    background: #ffffff; /* صفحه سفید */
-  }
-
-  /* فریم */
-  .frame-line {
-    position: absolute;
-    background: #000; /* ثابت و مشکی */
-  }
-
-  /* گوشه بالا چپ */
-  .frame-top-left-h { top:5.55%; left:3.33%; width:1.92%; height:3px; }
-  .frame-top-left-v { top:5.55%; left:3.33%; width:3px; height:3.17%; }
-
-  /* گوشه بالا راست */
-  .frame-top-right-h { top:5.55%; right:3.33%; width:1.92%; height:3px; }
-  .frame-top-right-v { top:5.55%; right:3.33%; width:3px; height:3.17%; }
-
-  /* پایین چپ */
-  .frame-bottom-left-h { bottom:5.55%; left:3.33%; width:1.92%; height:3px; }
-  .frame-bottom-left-v { bottom:5.55%; left:3.33%; width:3px; height:3.17%; }
-
-  /* پایین راست */
-  .frame-bottom-right-h { bottom:5.55%; right:3.33%; width:1.92%; height:3px; }
-  .frame-bottom-right-v { bottom:5.55%; right:3.33%; width:3px; height:3.17%; }
-
-  /* وسط چپ */
-  .frame-mid-left-v-top { left:3.33%; top:47.28%; width:3px; height:2.72%; }
-  .frame-mid-left-v-bottom { left:3.33%; top:50%; width:3px; height:2.72%; }
-  .frame-mid-left-h { left:3.33%; top:50%; width:1.92%; height:3px; }
-
-  /* وسط راست */
-  .frame-mid-right-v-top { right:3.33%; top:47.28%; width:3px; height:2.72%; }
-  .frame-mid-right-v-bottom { right:3.33%; top:50%; width:3px; height:2.72%; }
-  .frame-mid-right-h { right:3.33%; top:50%; width:1.92%; height:3px; }
-
-  /* منو بالا */
-  nav {
-    position: absolute;
-    top: 9.5%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 11px;
-    letter-spacing: 0.35em;
-  }
-  nav a {
-    color: #000;
-    text-decoration: none;
-    margin: 0 18px;
-  }
-
-  /* بخش مرکزی — دو ستونه */
-  .hero {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-45%);
-    width: 70%;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .col {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-  }
-
-  .left-col {
-    width: 55%;
-  }
-
-  .right-col {
-    width: 35%;
-    align-items: flex-end; /* راست‌چین مثل PDF */
-    text-align: right;
-  }
-
-  .title {
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    margin-bottom: 6px;
-  }
-
-  .subtitle {
-    font-size: 11px;
-    letter-spacing: 0.16em;
-    margin-bottom: 6px;
-  }
-
-  .edu-line {
-    font-size: 10px;
-    opacity: 0.8;
-    letter-spacing: 0.05em;
-    margin-bottom: 4px;
-  }
-
-  /* Divider بین ستون‌ها */
-  .divider {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-10%);
-    width: 1px;
-    height: 110px;
-    background: #000;
-  }
-
-  /* راست ستون */
-  .resume {
-    font-size: 11px;
-    margin-bottom: 10px;
-  }
-  .portfolio {
-    font-size: 34px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    margin-bottom: 6px;
-  }
-  .year {
-    font-size: 16px;
-    letter-spacing: 0.25em;
-  }
-
-  /* ریسپانسیو ساده */
-  @media(max-width:900px){
-    .hero { flex-direction: column; text-align: center; }
-    .left-col, .right-col { width: 100%; align-items: center; text-align: center; }
-    .divider { display:none; }
-  }
-</style>
-</head>
-
-<body>
-
-<div class="page">
-
-  <!-- فریم -->
-  <div class="frame-top-left-h frame-line"></div>
-  <div class="frame-top-left-v frame-line"></div>
-
-  <div class="frame-top-right-h frame-line"></div>
-  <div class="frame-top-right-v frame-line"></div>
-
-  <div class="frame-bottom-left-h frame-line"></div>
-  <div class="frame-bottom-left-v frame-line"></div>
-
-  <div class="frame-bottom-right-h frame-line"></div>
-  <div class="frame-bottom-right-v frame-line"></div>
-
-  <div class="frame-mid-left-v-top frame-line"></div>
-  <div class="frame-mid-left-v-bottom frame-line"></div>
-  <div class="frame-mid-left-h frame-line"></div>
-
-  <div class="frame-mid-right-v-top frame-line"></div>
-  <div class="frame-mid-right-v-bottom frame-line"></div>
-  <div class="frame-mid-right-h frame-line"></div>
-
-  <!-- منو -->
-  <nav>
-    <a href="#">HOME</a>
-    <a href="#">RESEARCH</a>
-    <a href="#">ABOUT</a>
-    <a href="#">CONTACT</a>
-  </nav>
-
-  <!-- متن دو ستونه -->
-  <div class="hero">
-    <div class="left-col col">
-      <div class="title">SAEID SORKHI</div>
-      <div class="subtitle">RESEARCHER & DIGITAL DESIGNER</div>
-      <div class="edu-line">M.A. VISUAL COMMUNICATION</div>
-      <div class="edu-line">B. ARCHITECTURE</div>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="globals.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="home">
+      <img class="frame" src="https://c.animaapp.com/mioiysssqpTOo6/img/frame.svg" />
+      <div class="main-title">
+        <div class="element">2 25</div>
+        <div class="CV">Résumé+</div>
+        <div class="portfolio">P RTFOLIO</div>
+        <img class="scroll" src="https://c.animaapp.com/mioiysssqpTOo6/img/scroll.png" />
+      </div>
+      <div class="navbar">
+        <div class="text-wrapper">HOME</div>
+        <div class="research">RESEARCH</div>
+        <div class="about">ABOUT</div>
+        <div class="contact">CONTACT</div>
+      </div>
+      <div class="details">
+        <div class="div">SAEID SORKHI</div>
+        <div class="RESEARCHER-DIGITAL">RESEARCHER &amp; DIGITAL DESIGNER</div>
+        <div class="text-wrapper-2">M.A. VISUAL COMMUNICATION</div>
+        <div class="text-wrapper-2">B. ARCHITECTURE</div>
+      </div>
+      <img class="vertical-line" src="https://c.animaapp.com/mioiysssqpTOo6/img/vertical-line.png" />
     </div>
-
-    <div class="right-col col">
-      <div class="resume">Résumé +</div>
-      <div class="portfolio">PORTFOLIO</div>
-      <div class="year">2025</div>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-</div>
-
-</body>
+  </body>
 </html>
