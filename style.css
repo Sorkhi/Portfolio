@@ -13,17 +13,19 @@ body {
   box-sizing: border-box;
 }
 
-/* ---------------------------
-   HIDE OLD FRAME + OLD VERTICAL LINE
----------------------------- */
-.home .frame,
-.home .vertical-line {
-  display: none !important;
+/* استایل تصاویر */
+.home .frame {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  right: 40px;
+  bottom: 40px;
+  width: calc(100% - 80px);
+  height: calc(100% - 80px);
+  object-fit: contain;
 }
 
-/* ---------------------------
-   NAVBAR (TOP LINKS)
----------------------------- */
+/* استایل منوی بالا */
 .navbar {
   display: flex;
   justify-content: center;
@@ -36,37 +38,15 @@ body {
 .navbar-link {
   color: #000;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 18px;
   font-family: "JetBrains Mono", sans-serif;
-  font-weight: 100;
-  position: relative;
-  padding-bottom: 4px;
-}
-
-/* hover underline red */
-.navbar-link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 2px;
-  background: #d2232a;
-  transform: scaleX(0);
-  transition: transform 0.25s ease;
 }
 
 .navbar-link:hover {
-  color: #d2232a;
+  color: #d2232a; /* تغییر رنگ لینک‌ها هنگام هاور */
 }
 
-.navbar-link:hover::after {
-  transform: scaleX(1);
-}
-
-/* ---------------------------
-   MAIN TITLE AREA
----------------------------- */
+/* استایل عنوان و سایر بخش‌ها */
 .home .main-title {
   position: absolute;
   top: 50%;
@@ -80,30 +60,48 @@ body {
   position: absolute;
   top: 90px;
   left: 0;
+  height: 84px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
   font-family: "JetBrains Mono", Helvetica;
   font-weight: 300;
-  color: #000;
+  color: #000000;
   font-size: 64px;
+  letter-spacing: -1.28px;
+  line-height: normal;
 }
 
 .home .CV {
   position: absolute;
   top: 4px;
   left: 0;
+  height: 46px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
   font-family: "JetBrains Mono", Helvetica;
   font-weight: 200;
-  color: #000;
+  color: #000000;
   font-size: 35px;
+  letter-spacing: -0.70px;
+  line-height: normal;
 }
 
 .home .portfolio {
   position: absolute;
   top: 34px;
   left: 0;
+  height: 84px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
   font-family: "JetBrains Mono", Helvetica;
   font-weight: 700;
-  color: #000;
+  color: #000000;
   font-size: 64px;
+  letter-spacing: -1.28px;
+  line-height: normal;
 }
 
 .home .scroll {
@@ -114,9 +112,82 @@ body {
   height: 108px;
 }
 
-/* ---------------------------
-   DETAILS (RIGHT SIDE TEXT)
----------------------------- */
+.home .navbar {
+  display: flex;
+  width: 843px;
+  max-width: calc(100% - 160px);
+  align-items: baseline;
+  justify-content: space-between;
+  position: absolute;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.home .text-wrapper {
+  z-index: 3;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: fit-content;
+  margin-top: -1.00px;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 100;
+  color: #000000;
+  font-size: 24px;
+  letter-spacing: 9.60px;
+  line-height: normal;
+}
+
+.home .research {
+  width: fit-content;
+  z-index: 2;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin-top: -1.00px;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 100;
+  color: #000000;
+  font-size: 24px;
+  letter-spacing: 9.60px;
+  line-height: normal;
+}
+
+.home .about {
+  z-index: 1;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: fit-content;
+  margin-top: -1.00px;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 100;
+  color: #000000;
+  font-size: 24px;
+  letter-spacing: 9.60px;
+  line-height: normal;
+}
+
+.home .contact {
+  width: fit-content;
+  z-index: 0;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin-top: -1.00px;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 100;
+  color: #000000;
+  font-size: 24px;
+  letter-spacing: 9.60px;
+  line-height: normal;
+}
+
 .home .details {
   display: inline-flex;
   flex-direction: column;
@@ -124,102 +195,66 @@ body {
   top: 50%;
   left: 30%;
   transform: translate(-50%, -50%);
-  text-align: right;
+  align-items: flex-end;
+  justify-content: center;
 }
 
 .home .div {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: fit-content;
+  margin-top: -1.00px;
   font-family: "JetBrains Mono", Helvetica;
   font-weight: 500;
-  color: #000;
+  color: #000000;
   font-size: 40px;
+  text-align: right;
+  letter-spacing: -0.80px;
+  line-height: normal;
 }
 
 .home .RESEARCHER-DIGITAL {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: fit-content;
   font-family: "JetBrains Mono", Helvetica;
   font-weight: 300;
   color: #d2232a;
   font-size: 24px;
+  text-align: right;
+  letter-spacing: 0;
+  line-height: normal;
 }
 
 .home .text-wrapper-2 {
+  position: relative;
+  display: flex;
+  width: fit-content;
   font-family: "JetBrains Mono", Helvetica;
   font-weight: 100;
-  color: #000;
+  color: #000000;
   font-size: 24px;
+  text-align: right;
+  letter-spacing: -0.48px;
+  line-height: normal;
+  align-items: flex-end;
+  justify-content: center;
 }
 
-/* ---------------------------
-   RESPONSIVE FRAME (PERCENT-BASED)
----------------------------- */
-
-.frame-container {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 2; /* بالاتر از پس‌زمینه، پایین‌تر از محتوا */
-}
-
-.corner, .side {
+.home .vertical-line {
   position: absolute;
-  background: black;
-  width: 0.25vw;
+  width: 0;
+  height: 13.70%;
+  top: 41.67%;
+  left: 50.06%;
 }
 
-/* corners */
-.corner {
-  height: 4vh;
+@media (max-width: 768px) {
+  .home .vertical-line {
+    display: none;
+  }
 }
-
-.corner::after {
-  content: "";
-  position: absolute;
-  height: 0.25vw;
-  width: 4vh;
-  background: black;
-}
-
-/* TL */
-.corner.tl { top: 2%; left: 2%; }
-.corner.tl::after { top: 0; left: 0; }
-
-/* TR */
-.corner.tr { top: 2%; right: 2%; }
-.corner.tr::after { top: 0; right: 0; }
-
-/* BL */
-.corner.bl { bottom: 2%; left: 2%; }
-.corner.bl::after { bottom: 0; left: 0; }
-
-/* BR */
-.corner.br { bottom: 2%; right: 2%; }
-.corner.br::after { bottom: 0; right: 0; }
-
-/* SIDE CUTS */
-.side {
-  height: 3vh;
-}
-
-/* Left */
-.side.left-top    { left: 2%; top: 35%; }
-.side.left-bottom { left: 2%; top: 50%; }
-
-/* Right */
-.side.right-top    { right: 2%; top: 35%; }
-.side.right-bottom { right: 2%; top: 50%; }
-
-/* ---------------------------
-   RESPONSIVE VERTICAL LINE
----------------------------- */
-.vertical-divider {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 2px;
-  height: 30vh;
-  background: black;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  opacity: 1;
-  z-index: 1;
-}
-``
