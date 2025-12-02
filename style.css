@@ -129,4 +129,110 @@ body {
   font-family: "JetBrains Mono", Helvetica;
   font-weight: 100;
   color: #000000;
-  font-
+  font-size: 24px;
+  letter-spacing: 9.60px;
+  line-height: normal;
+}
+
+.home .about {
+  z-index: 1;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: fit-content;
+  margin-top: -1.00px;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 100;
+  color: #000000;
+  font-size: 24px;
+  letter-spacing: 9.60px;
+  line-height: normal;
+}
+
+.home .contact {
+  width: fit-content;
+  z-index: 0;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin-top: -1.00px;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 100;
+  color: #000000;
+  font-size: 24px;
+  letter-spacing: 9.60px;
+  line-height: normal;
+}
+
+.home .details {
+  display: inline-flex;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.home .div {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: fit-content;
+  margin-top: -1.00px;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 500;
+  color: #000000;
+  font-size: 40px;
+  text-align: right;
+  letter-spacing: -0.80px;
+  line-height: normal;
+}
+
+.home .RESEARCHER-DIGITAL {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: fit-content;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 300;
+  color: #d2232a;
+  font-size: 24px;
+  text-align: right;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.home .text-wrapper-2 {
+  position: relative;
+  display: flex;
+  width: fit-content;
+  font-family: "JetBrains Mono", Helvetica;
+  font-weight: 100;
+  color: #000000;
+  font-size: 24px;
+  text-align: right;
+  letter-spacing: -0.48px;
+  line-height: normal;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.home .vertical-line {
+  position: absolute;
+  width: 0;
+  height: 13.70%;
+  top: 41.67%;
+  left: 50.06%;
+}
+
+@media (max-width: 768px) {
+  .home .vertical-line {
+    display: none;
+  }
+}
