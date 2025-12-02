@@ -1,33 +1,86 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="globals.css" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="home">
-      <img class="frame" src="images/Frame.svg" />
-      <div class="main-title">
-        <div class="element">2 25</div>
-        <div class="CV">Résumé+</div>
-        <div class="portfolio">P RTFOLIO</div>
-        <img class="scroll" src="images/Scroll.svg" />
-      </div>
-      <div class="navbar">
-        <div class="text-wrapper">HOME</div>
-        <div class="research">RESEARCH</div>
-        <div class="about">ABOUT</div>
-        <div class="contact">CONTACT</div>
-      </div>
-      <div class="details">
-        <div class="div">SAEID SORKHI</div>
-        <div class="RESEARCHER-DIGITAL">RESEARCHER &amp; DIGITAL DESIGNER</div>
-        <div class="text-wrapper-2">M.A. VISUAL COMMUNICATION</div>
-        <div class="text-wrapper-2">B. ARCHITECTURE</div>
-      </div>
-      <img class="vertical-line" src="images/Vertical%20Line.svg" />
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Page</title>
+    <!-- اضافه کردن فونت JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: white;
+            color: #D2232A;
+            font-family: 'JetBrains Mono', monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #D2232A;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .social-links li {
+            margin: 10px 0;
+        }
+
+        .social-links a {
+            color: #D2232A;
+            text-decoration: none;
+            font-size: 1.5rem;
+        }
+
+        .social-links a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 1rem;
+            color: #D2232A;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SAEID SORKHI</h1>
+        <p>RESEARCHER & DIGITAL DESIGNER</p>
+        <p>Contact me via the following links:</p>
+        
+        <ul class="social-links">
+            <li><a href="https://www.linkedin.com/in/yourprofile" target="_blank">LinkedIn</a></li>
+            <li><a href="https://twitter.com/yourhandle" target="_blank">Twitter</a></li>
+            <li><a href="https://github.com/yourusername" target="_blank">GitHub</a></li>
+            <li><a href="https://www.instagram.com/yourusername" target="_blank">Instagram</a></li>
+            <li><a href="mailto:youremail@example.com">Email</a></li>
+        </ul>
+
+        <footer>
+            <p>&copy; 2025 SAEID SORKHI</p>
+        </footer>
     </div>
-  </body>
+</body>
 </html>
