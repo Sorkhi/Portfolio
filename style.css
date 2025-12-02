@@ -38,31 +38,12 @@ body {
 .navbar-link {
   color: #000;
   text-decoration: none;
-  font-size: 16px; /* کاهش اندازه لینک‌ها */
+  font-size: 18px;
   font-family: "JetBrains Mono", sans-serif;
-  position: relative;
-  padding-bottom: 5px;
 }
 
 .navbar-link:hover {
-  color: #fff;
-}
-
-/* اضافه کردن افکت مستطیل قرمز رنگ زیر لینک‌ها هنگام هاور */
-.navbar-link::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 3px;
-  background-color: #d2232a;
-  bottom: 0;
-  left: 0;
-  transform: scaleX(0);
-  transition: transform 0.3s ease-in-out;
-}
-
-.navbar-link:hover::after {
-  transform: scaleX(1); /* نمایش مستطیل قرمز */
+  color: #d2232a; /* تغییر رنگ لینک‌ها هنگام هاور */
 }
 
 /* استایل عنوان و سایر بخش‌ها */
@@ -121,15 +102,6 @@ body {
   font-size: 64px;
   letter-spacing: -1.28px;
   line-height: normal;
-}
-
-/* انتقال بخش‌های CV و Portfolio به پایین */
-.home .details {
-  position: absolute;
-  bottom: 10%; /* پایین صفحه */
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
 }
 
 .home .scroll {
@@ -216,6 +188,17 @@ body {
   line-height: normal;
 }
 
+.home .details {
+  display: inline-flex;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  align-items: flex-end;
+  justify-content: center;
+}
+
 .home .div {
   position: relative;
   display: flex;
@@ -259,4 +242,19 @@ body {
   letter-spacing: -0.48px;
   line-height: normal;
   align-items: flex-end;
-  justify-content:
+  justify-content: center;
+}
+
+.home .vertical-line {
+  position: absolute;
+  width: 0;
+  height: 13.70%;
+  top: 41.67%;
+  left: 50.06%;
+}
+
+@media (max-width: 768px) {
+  .home .vertical-line {
+    display: none;
+  }
+}
