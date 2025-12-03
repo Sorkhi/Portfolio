@@ -252,3 +252,55 @@ body {
   top: 41%;
   left: 49.8%;
 }
+
+/* ---------------------------
+   BOTTOM NAVBAR BUTTONS
+---------------------------- */
+
+.navbar-bottom {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 40px;
+  z-index: 10;
+}
+
+.navbar-bottom .navbar-link {
+  position: relative;
+  font-size: 18px;
+  font-weight: 200;
+  color: #000;
+  text-decoration: none;
+  padding: 6px 14px;
+  transition: color 0.25s ease;
+}
+
+/* مستطیل قرمز زیر دکمه */
+.navbar-bottom .navbar-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;               /* کل پس زمینه را پر می‌کند */
+  background: #d2232a;
+  border-radius: 3px;
+  
+  /* با scale مخفی می‌کنیم */
+  transform: scaleY(0);
+  transform-origin: bottom;
+
+  transition: transform 0.25s ease-out;
+  z-index: -1; /* پشت متن قرار بگیرد */
+}
+
+/* هاور */
+.navbar-bottom .navbar-link:hover {
+  color: white;
+}
+
+.navbar-bottom .navbar-link:hover::after {
+  transform: scaleY(1);   /* انیمیشن باز شدن مستطیل */
+}
