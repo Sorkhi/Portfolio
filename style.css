@@ -289,8 +289,8 @@ body {
   border-radius: 2px;
   
   /* با scale مخفی می‌کنیم */
-  transform: scaleX(0);
-  transform-origin: left;
+  transform: scaleY(0);
+  transform-origin: bottom;
 
   transition: transform 0.25s ease-out;
   z-index: -1; /* پشت متن قرار بگیرد */
@@ -302,5 +302,5 @@ body {
 }
 
 .navbar-bottom .navbar-link:hover::after {
-  transform: scaleX(1);   /* انیمیشن باز شدن مستطیل */
+  transform: scaleY(1);   /* انیمیشن باز شدن مستطیل */
 }
