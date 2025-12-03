@@ -38,7 +38,7 @@ body {
 .navbar-link {
   color: #000;
   text-decoration: none;
-  font-size: 18px;
+  font-size: 16px;
   font-family: "JetBrains Mono", sans-serif;
 }
 
@@ -50,7 +50,7 @@ body {
 .home .main-title {
   position: absolute;
   top: 50%;
-  left: 60%;
+  left: 62%;
   transform: translate(-50%, -50%);
   width: 336px;
   height: 174px;
@@ -114,7 +114,7 @@ body {
 
 .home .navbar {
   display: flex;
-  width: 843px;
+  width: 600px;
   max-width: calc(100% - 160px);
   align-items: baseline;
   justify-content: space-between;
@@ -193,7 +193,7 @@ body {
   flex-direction: column;
   position: absolute;
   top: 50%;
-  left: 30%;
+  left: 35%;
   transform: translate(-50%, -50%);
   align-items: flex-end;
   justify-content: center;
@@ -247,14 +247,8 @@ body {
 
 .home .vertical-line {
   position: absolute;
-  width: 0;
-  height: 13.70%;
+  width: 1;
+  height: 16.00%;
   top: 41.67%;
   left: 50.06%;
-}
-
-@media (max-width: 768px) {
-  .home .vertical-line {
-    display: none;
-  }
 }
