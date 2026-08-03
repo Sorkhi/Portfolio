@@ -1,0 +1,50 @@
+---
+---
+
+<button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle color theme">
+  <span aria-hidden="true">◐</span>
+</button>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--space-8);
+    height: var(--space-8);
+    font-size: var(--text-md);
+    border: var(--rule-width) solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-fg);
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--color-fg);
+  }
+</style>
+
+<script>
+  const STORAGE_KEY = "theme";
+  const root = document.documentElement;
+  const toggle = document.querySelector<HTMLButtonElement>("[data-theme-toggle]");
+
+  type Theme = "light" | "dark";
+
+  function applyTheme(theme: Theme) {
+    root.setAttribute("data-theme", theme);
+    localStorage.setItem(STORAGE_KEY, theme);
+  }
+
+  toggle?.addEventListener("click", () => {
+    const next: Theme = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+
+    if (document.startViewTransition) {
+      document.startViewTransition(() => applyTheme(next));
+    } else {
+      applyTheme(next);
+    }
+  });
+</script>

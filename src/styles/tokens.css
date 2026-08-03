@@ -1,0 +1,124 @@
+/**
+ * Single source of truth for design values. Every color, spacing value,
+ * type size, and duration used anywhere in the codebase is defined here —
+ * never hardcode a hex value, px size, or duration in a component.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* Font */
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  /* Type scale */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  --text-xl: clamp(1.75rem, 1.25rem + 2vw, 2.75rem);
+  --text-2xl: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+
+  --leading-tight: 1.1;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.7;
+
+  /* Spacing scale (4px base unit) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* Layout */
+  --content-max-width: 76rem;
+  --grid-gutter: var(--space-6);
+  --rule-width: 1px;
+
+  /* Radii — kept minimal for an editorial, typographic feel */
+  --radius-none: 0px;
+  --radius-sm: 2px;
+
+  /* Motion durations + easing */
+  --duration-fast: 150ms;
+  --duration-base: 240ms;
+  --duration-slow: 400ms;
+  --duration-theme: 240ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Z-index scale */
+  --z-header: 100;
+  --z-overlay: 200;
+}
+
+/* Color tokens are @property-registered so they can be transitioned
+   directly (theme cross-fade, hover/focus states) instead of only being
+   swapped instantly. */
+@property --color-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #fbfaf8;
+}
+@property --color-surface {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ffffff;
+}
+@property --color-fg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #17140f;
+}
+@property --color-muted {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #6b6459;
+}
+@property --color-border {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #d9d3c7;
+}
+@property --color-accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #a8422f;
+}
+
+:root,
+[data-theme="light"] {
+  --color-bg: #fbfaf8;
+  --color-surface: #ffffff;
+  --color-fg: #17140f;
+  --color-muted: #6b6459;
+  --color-border: #d9d3c7;
+  --color-accent: #a8422f;
+}
+
+[data-theme="dark"] {
+  --color-bg: #121110;
+  --color-surface: #17140f;
+  --color-fg: #f2efe9;
+  --color-muted: #9b9488;
+  --color-border: #2c2a26;
+  --color-accent: #d97a5f;
+}
+
+/* No-JS / pre-hydration fallback only — once the inline bootstrap script in
+   PageShell runs, data-theme is always set explicitly and this block is
+   inert. Keep the values identical to [data-theme="dark"] above. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #121110;
+    --color-surface: #17140f;
+    --color-fg: #f2efe9;
+    --color-muted: #9b9488;
+    --color-border: #2c2a26;
+    --color-accent: #d97a5f;
+  }
+}

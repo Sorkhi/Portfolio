@@ -1,0 +1,45 @@
+---
+import PageShell from "@/components/layout/PageShell.astro";
+import Reveal from "@/components/motion/Reveal.astro";
+
+export const prerender = true;
+---
+
+<PageShell
+  title="Saeid Sorkhi — Visual Designer / Researcher"
+  description="Personal portfolio of Saeid Sorkhi, visual designer and researcher."
+>
+  <section class="hero">
+    <h1>Saeid Sorkhi</h1>
+    <p class="hero__role">Visual Designer / Researcher</p>
+  </section>
+
+  <Reveal as="section" class="intro">
+    <p>
+      Scaffold homepage — replace with real casework, hero treatment, and a featured project grid
+      per the redesign brief.
+    </p>
+  </Reveal>
+</PageShell>
+
+<style>
+  .hero {
+    padding: var(--space-32) var(--grid-gutter) var(--space-16);
+  }
+
+  .hero h1 {
+    font-size: var(--text-2xl);
+    line-height: var(--leading-tight);
+    font-weight: 500;
+  }
+
+  .hero__role {
+    margin-top: var(--space-2);
+    color: var(--color-muted);
+  }
+
+  .intro {
+    padding: var(--space-16) var(--grid-gutter);
+    max-width: 40ch;
+  }
+</style>
