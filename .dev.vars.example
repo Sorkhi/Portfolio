@@ -1,0 +1,2 @@
+# Copy to .dev.vars (gitignored) for local wrangler dev.
+# Real values live as Worker secrets in Cloudflare, never in the repo.

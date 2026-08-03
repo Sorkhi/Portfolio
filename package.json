@@ -1,0 +1,33 @@
+{
+  "name": "sorkhi-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "packageManager": "pnpm@11.18.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "wrangler dev --config dist/server/wrangler.json",
+    "check": "astro check",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "deploy": "astro build && wrangler deploy --config dist/server/wrangler.json"
+  },
+  "dependencies": {
+    "astro": "^7.1.4",
+    "@astrojs/cloudflare": "^14.1.7",
+    "@astrojs/mdx": "^7.0.5",
+    "@fontsource-variable/jetbrains-mono": "^5.1.1",
+    "gsap": "^3.12.5",
+    "lenis": "^1.1.18"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@biomejs/biome": "^1.9.4",
+    "typescript": "^5.7.2",
+    "wrangler": "^4.83.0"
+  }
+}

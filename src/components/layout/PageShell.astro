@@ -1,0 +1,48 @@
+---
+import "@fontsource-variable/jetbrains-mono";
+import jetbrainsMonoWoff2 from "@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url";
+import "@/styles/tokens.css";
+import "@/styles/base.css";
+import Footer from "./Footer.astro";
+import Header from "./Header.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  /** Set false for full-bleed pages that render their own nav (e.g. the homepage hero). */
+  chrome?: boolean;
+}
+
+const { title, description, chrome = true } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" as="font" type="font/woff2" href={jetbrainsMonoWoff2} crossorigin />
+    <script is:inline>
+      (function () {
+        var stored = localStorage.getItem("theme");
+        var theme =
+          stored === "light" || stored === "dark"
+            ? stored
+            : window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+  </head>
+  <body>
+    {chrome && <Header />}
+    <main>
+      <slot />
+    </main>
+    {chrome && <Footer />}
+  </body>
+</html>
