@@ -5,6 +5,12 @@ import Frame from "@/components/primitives/Frame.astro";
 
 export const prerender = true;
 
+// Second digit of the year is assumed to be "0" (true through 2029) since the
+// mark glyph below literally replaces that digit with the capsule shape.
+const year = new Date().getFullYear();
+const yearFirst = String(year)[0];
+const yearRest = String(year).slice(2);
+
 const topLinks = [
   { label: "Email", href: "mailto:SaSorkhi@gmail.com" },
   { label: "Phone", href: "tel:+989395065181" },
@@ -57,36 +63,28 @@ const bottomLinks = [
 
       <div class="hero__divider" aria-hidden="true"></div>
 
-      <div class="hero__mark" role="img" aria-label="Résumé+ Portfolio 2025">
+      <div class="hero__mark" role="img" aria-label={`Résumé+ Portfolio ${year}`}>
         <span class="hero__mark-eyebrow" aria-hidden="true">Résumé+</span>
-        <span class="hero__mark-line hero__mark-line--portfolio" aria-hidden="true">
-          P<span class="hero__mark-o">
-            <svg viewBox="0 0 31 109" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M23.0338 106.689C25.2827 105.522 27.0237 103.878 28.2568 101.759C29.4898 99.6391 30.1063 97.1508 30.1063 94.2964V14.1451C30.1063 11.2907 29.4898 8.8038 28.2568 6.68427C27.0237 4.56473 25.2939 2.92115 23.0658 1.75214C20.8377 0.584511 18.1671 0 15.0525 0C12.0242 0 9.37578 0.584511 7.10455 1.75214C4.83332 2.92115 3.08119 4.56473 1.84816 6.68427C0.616518 8.8038 0 11.2907 0 14.1451V94.2964C0 97.1508 0.616518 99.6391 1.84816 101.759C3.08119 103.878 4.82219 105.522 7.07255 106.689C9.32012 107.857 11.981 108.442 15.0525 108.442C18.1239 108.442 20.7834 107.857 23.0338 106.689ZM9.66804 99.4874C8.32645 98.189 7.65566 96.4591 7.65566 94.2964V14.1451C7.65566 11.9838 8.32645 10.2526 9.66804 8.95551C11.0082 7.65706 12.8035 7.00853 15.0525 7.00853C17.3014 7.00853 19.0967 7.65706 20.4383 8.95551C21.7785 10.2526 22.4493 11.9838 22.4493 14.1451V94.2964C22.4493 96.4591 21.7785 98.189 20.4383 99.4874C19.0967 100.784 17.3014 101.433 15.0525 101.433C12.8035 101.433 11.0082 100.784 9.66804 99.4874Z"
-                fill="var(--color-accent)"
-              />
-              <path
-                d="M18.1673 29.4192C18.9453 28.5981 19.335 27.5168 19.335 26.1752C19.335 24.9213 18.9453 23.904 18.1673 23.126C17.3894 22.3467 16.3512 21.957 15.0527 21.957C13.7557 21.957 12.7175 22.3467 11.9381 23.126C11.1602 23.904 10.7705 24.9422 10.7705 26.2392C10.7705 27.5808 11.1699 28.6524 11.9702 29.4512C12.7704 30.2528 13.7974 30.6523 15.0527 30.6523C16.3512 30.6523 17.3894 30.2417 18.1673 29.4192Z"
-                fill="var(--color-fg)"
-              />
-            </svg>
-          </span>RTFOLIO
-        </span>
-        <span class="hero__mark-line hero__mark-line--year" aria-hidden="true">
-          2<span class="hero__mark-o">
-            <svg viewBox="0 0 31 109" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M23.0338 106.689C25.2827 105.522 27.0237 103.878 28.2568 101.759C29.4898 99.6391 30.1063 97.1508 30.1063 94.2964V14.1451C30.1063 11.2907 29.4898 8.8038 28.2568 6.68427C27.0237 4.56473 25.2939 2.92115 23.0658 1.75214C20.8377 0.584511 18.1671 0 15.0525 0C12.0242 0 9.37578 0.584511 7.10455 1.75214C4.83332 2.92115 3.08119 4.56473 1.84816 6.68427C0.616518 8.8038 0 11.2907 0 14.1451V94.2964C0 97.1508 0.616518 99.6391 1.84816 101.759C3.08119 103.878 4.82219 105.522 7.07255 106.689C9.32012 107.857 11.981 108.442 15.0525 108.442C18.1239 108.442 20.7834 107.857 23.0338 106.689ZM9.66804 99.4874C8.32645 98.189 7.65566 96.4591 7.65566 94.2964V14.1451C7.65566 11.9838 8.32645 10.2526 9.66804 8.95551C11.0082 7.65706 12.8035 7.00853 15.0525 7.00853C17.3014 7.00853 19.0967 7.65706 20.4383 8.95551C21.7785 10.2526 22.4493 11.9838 22.4493 14.1451V94.2964C22.4493 96.4591 21.7785 98.189 20.4383 99.4874C19.0967 100.784 17.3014 101.433 15.0525 101.433C12.8035 101.433 11.0082 100.784 9.66804 99.4874Z"
-                fill="var(--color-accent)"
-              />
-              <path
-                d="M18.1673 29.4192C18.9453 28.5981 19.335 27.5168 19.335 26.1752C19.335 24.9213 18.9453 23.904 18.1673 23.126C17.3894 22.3467 16.3512 21.957 15.0527 21.957C13.7557 21.957 12.7175 22.3467 11.9381 23.126C11.1602 23.904 10.7705 24.9422 10.7705 26.2392C10.7705 27.5808 11.1699 28.6524 11.9702 29.4512C12.7704 30.2528 13.7974 30.6523 15.0527 30.6523C16.3512 30.6523 17.3894 30.2417 18.1673 29.4192Z"
-                fill="var(--color-fg)"
-              />
-            </svg>
-          </span>25
-        </span>
+        <div class="hero__mark-lines" aria-hidden="true">
+          <span class="hero__mark-line hero__mark-line--portfolio">
+            P<span class="hero__mark-gap">O</span>RTFOLIO
+          </span>
+          <span class="hero__mark-line hero__mark-line--year">
+            {yearFirst}<span class="hero__mark-gap">0</span>{yearRest}
+          </span>
+          <!-- One capsule glyph doubles as the O in PORTFOLIO and the 0 in the
+               year, running from the first line down into the second. -->
+          <svg class="hero__mark-capsule" viewBox="0 0 31 109" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M23.0338 106.689C25.2827 105.522 27.0237 103.878 28.2568 101.759C29.4898 99.6391 30.1063 97.1508 30.1063 94.2964V14.1451C30.1063 11.2907 29.4898 8.8038 28.2568 6.68427C27.0237 4.56473 25.2939 2.92115 23.0658 1.75214C20.8377 0.584511 18.1671 0 15.0525 0C12.0242 0 9.37578 0.584511 7.10455 1.75214C4.83332 2.92115 3.08119 4.56473 1.84816 6.68427C0.616518 8.8038 0 11.2907 0 14.1451V94.2964C0 97.1508 0.616518 99.6391 1.84816 101.759C3.08119 103.878 4.82219 105.522 7.07255 106.689C9.32012 107.857 11.981 108.442 15.0525 108.442C18.1239 108.442 20.7834 107.857 23.0338 106.689ZM9.66804 99.4874C8.32645 98.189 7.65566 96.4591 7.65566 94.2964V14.1451C7.65566 11.9838 8.32645 10.2526 9.66804 8.95551C11.0082 7.65706 12.8035 7.00853 15.0525 7.00853C17.3014 7.00853 19.0967 7.65706 20.4383 8.95551C21.7785 10.2526 22.4493 11.9838 22.4493 14.1451V94.2964C22.4493 96.4591 21.7785 98.189 20.4383 99.4874C19.0967 100.784 17.3014 101.433 15.0525 101.433C12.8035 101.433 11.0082 100.784 9.66804 99.4874Z"
+              fill="var(--color-accent)"
+            />
+            <path
+              d="M18.1673 29.4192C18.9453 28.5981 19.335 27.5168 19.335 26.1752C19.335 24.9213 18.9453 23.904 18.1673 23.126C17.3894 22.3467 16.3512 21.957 15.0527 21.957C13.7557 21.957 12.7175 22.3467 11.9381 23.126C11.1602 23.904 10.7705 24.9422 10.7705 26.2392C10.7705 27.5808 11.1699 28.6524 11.9702 29.4512C12.7704 30.2528 13.7974 30.6523 15.0527 30.6523C16.3512 30.6523 17.3894 30.2417 18.1673 29.4192Z"
+              fill="var(--color-fg)"
+            />
+          </svg>
+        </div>
       </div>
     </div>
 
@@ -197,28 +195,36 @@ const bottomLinks = [
     font-weight: 200;
   }
 
-  .hero__mark-line {
+  /* Font-size lives here (not on .hero__mark-line) so the capsule below can
+     size/position itself in em units against the same value. */
+  .hero__mark-lines {
+    position: relative;
+    display: flex;
+    flex-direction: column;
     font-size: clamp(2.25rem, 1.75rem + 3vw, 4rem);
+  }
+
+  .hero__mark-line {
+    font-size: inherit;
     font-weight: 700;
     line-height: 1.05;
     letter-spacing: -0.02em;
     white-space: nowrap;
   }
 
-  .hero__mark-o {
-    position: relative;
-    display: inline-block;
-    width: 0.32em;
-    height: 0.98em;
-    margin: 0 0.02em;
-    vertical-align: -0.11em;
+  .hero__mark-gap {
+    visibility: hidden;
   }
 
-  .hero__mark-o svg {
+  /* Spans from partway through the PORTFOLIO line down through partway into
+     the year line — one glyph standing in for both the O and the 0. */
+  .hero__mark-capsule {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    left: 1ch;
+    top: 0.2em;
+    height: 1.7em;
+    aspect-ratio: 31 / 109;
+    width: auto;
   }
 
   /* Bottom nav hover: corner-bracket ticks (echoing the page frame) clamp
