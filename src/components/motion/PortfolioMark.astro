@@ -66,7 +66,7 @@ const yearRest = String(year).slice(2);
     font-size: inherit;
     font-weight: 700;
     line-height: 0.92;
-    letter-spacing: -0.02em;
+    letter-spacing: 0.03em;
     white-space: nowrap;
   }
 
@@ -106,22 +106,6 @@ const yearRest = String(year).slice(2);
 
   .mark__dot {
     transition: fill var(--duration-flip) var(--ease-out);
-  }
-
-  @media (hover: hover) {
-    .mark__toggle:hover .mark__dot {
-      animation: dot-nudge 0.6s ease-in-out infinite;
-    }
-  }
-
-  @keyframes dot-nudge {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-0.35em);
-    }
   }
 
   @media (max-width: 40rem) {
@@ -175,14 +159,22 @@ const yearRest = String(year).slice(2);
     toggle.style.bottom = "auto";
   }
 
-  positionToggle();
+  // Neither "measure once now" nor document.fonts.ready nor a single
+  // ResizeObserver tick reliably guarantees the browser has actually
+  // completed a layout pass with the final font/CSS applied — in practice
+  // any of them can still read pre-swap metrics for a moment. Rather than
+  // depend on one signal, re-measure on all of them, plus a short burst of
+  // retries after load: each call is cheap (a couple getBoundingClientRect
+  // reads) and idempotent, so over-calling it is harmless.
+  const observedContainer = document.querySelector<HTMLElement>("[data-mark-lines]");
+  if (observedContainer) {
+    new ResizeObserver(() => positionToggle()).observe(observedContainer);
+  }
   document.fonts?.ready?.then(positionToggle);
-
-  let resizeTimer: ReturnType<typeof setTimeout>;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(positionToggle, 100);
-  });
+  positionToggle();
+  for (const delay of [50, 150, 400, 900]) {
+    setTimeout(positionToggle, delay);
+  }
 </script>
 
 <script>
@@ -219,6 +211,20 @@ const yearRest = String(year).slice(2);
           gsap.to(dot, { attr: { cy: targetY }, duration: 0.5, ease: "power2.inOut" });
         }
       });
+
+      // A few px of vertical bounce that plays once per hover-enter and
+      // settles — not a continuous wiggle for as long as the pointer stays.
+      if (!reduced && window.matchMedia("(hover: hover)").matches) {
+        toggle.addEventListener("pointerenter", () => {
+          const baseY = Number(dot.getAttribute("cy"));
+          gsap
+            .timeline()
+            .to(dot, { attr: { cy: baseY - 3 }, duration: 0.15, ease: "sine.inOut" })
+            .to(dot, { attr: { cy: baseY }, duration: 0.15, ease: "sine.inOut" })
+            .to(dot, { attr: { cy: baseY - 1.5 }, duration: 0.12, ease: "sine.inOut" })
+            .to(dot, { attr: { cy: baseY }, duration: 0.18, ease: "sine.inOut" });
+        });
+      }
     });
   });
 </script>

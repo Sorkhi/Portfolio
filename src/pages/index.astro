@@ -109,6 +109,14 @@ const bottomLinks = [
     --color-mark-dot: #ffffff;
   }
 
+  /* The role label and mark ring are a dark red on red (low contrast by
+     design), so drop the cursor glow behind them in this state — it's a
+     light glow, so wherever it sits it lifts that text's contrast instead
+     of just sitting on top of it. */
+  .hero[data-flipped] :global(.cursor-glow) {
+    z-index: 0;
+  }
+
   .hero__nav {
     position: relative;
     z-index: 2;
@@ -127,7 +135,7 @@ const bottomLinks = [
   }
 
   .hero__nav--top {
-    gap: var(--space-8);
+    gap: var(--space-12);
   }
 
   .hero__nav--top a:hover {
