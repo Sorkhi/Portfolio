@@ -52,6 +52,7 @@
   --duration-base: 240ms;
   --duration-slow: 400ms;
   --duration-theme: 240ms;
+  --duration-flip: 500ms;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Z-index scale */
@@ -103,6 +104,10 @@
   --color-border: #d9d3c7;
   --color-accent: #d2232a;
   --color-accent-glow: rgb(210 35 42 / 35%);
+  /* Constant "ink" for the portfolio-mark toggle dot — deliberately not part
+     of the flip/theme swap so it always reads against whatever the ring
+     color is. */
+  --color-mark-dot: #000000;
 }
 
 [data-theme="dark"] {
@@ -113,6 +118,7 @@
   --color-border: #2c2a26;
   --color-accent: #ff5b50;
   --color-accent-glow: rgb(255 91 80 / 35%);
+  --color-mark-dot: #000000;
 }
 
 /* No-JS / pre-hydration fallback only — once the inline bootstrap script in

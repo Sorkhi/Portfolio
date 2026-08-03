@@ -1,0 +1,163 @@
+---
+// The "Résumé+ / PORTFOLIO / <year>" wordmark. The pill-shaped glyph in the
+// gap stands in for both the O in PORTFOLIO and the 0 in the year; the dot
+// inside it is a click toggle that slides between the two rows (like the
+// scroll/switch shape it's built from) and flips the page's color scheme.
+interface Props {
+  year: number;
+}
+
+const { year } = Astro.props;
+const yearFirst = String(year)[0];
+// Assumes the year's second digit is "0" (true 2000-2099) since the glyph
+// literally replaces that digit with the toggle shape.
+const yearRest = String(year).slice(2);
+---
+
+<div class="mark">
+  <span class="mark__eyebrow" aria-hidden="true">Résumé+</span>
+  <div class="mark__lines">
+    <span class="mark__line mark__line--portfolio" aria-hidden="true">
+      P<span class="mark__gap">O</span>RTFOLIO
+    </span>
+    <span class="mark__line mark__line--year" aria-hidden="true">
+      {yearFirst}<span class="mark__gap">0</span>{yearRest}
+    </span>
+    <button
+      type="button"
+      class="mark__toggle"
+      data-mark-toggle
+      aria-pressed="false"
+      aria-label={`Résumé+ Portfolio ${year} — toggle accent color`}
+    >
+      <svg viewBox="0 0 31 109" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M23.0338 106.689C25.2827 105.522 27.0237 103.878 28.2568 101.759C29.4898 99.6391 30.1063 97.1508 30.1063 94.2964V14.1451C30.1063 11.2907 29.4898 8.8038 28.2568 6.68427C27.0237 4.56473 25.2939 2.92115 23.0658 1.75214C20.8377 0.584511 18.1671 0 15.0525 0C12.0242 0 9.37578 0.584511 7.10455 1.75214C4.83332 2.92115 3.08119 4.56473 1.84816 6.68427C0.616518 8.8038 0 11.2907 0 14.1451V94.2964C0 97.1508 0.616518 99.6391 1.84816 101.759C3.08119 103.878 4.82219 105.522 7.07255 106.689C9.32012 107.857 11.981 108.442 15.0525 108.442C18.1239 108.442 20.7834 107.857 23.0338 106.689ZM9.66804 99.4874C8.32645 98.189 7.65566 96.4591 7.65566 94.2964V14.1451C7.65566 11.9838 8.32645 10.2526 9.66804 8.95551C11.0082 7.65706 12.8035 7.00853 15.0525 7.00853C17.3014 7.00853 19.0967 7.65706 20.4383 8.95551C21.7785 10.2526 22.4493 11.9838 22.4493 14.1451V94.2964C22.4493 96.4591 21.7785 98.189 20.4383 99.4874C19.0967 100.784 17.3014 101.433 15.0525 101.433C12.8035 101.433 11.0082 100.784 9.66804 99.4874Z"
+          fill="var(--color-accent)"
+        />
+        <circle class="mark__dot" data-mark-dot cx="15.05" cy="26" r="4.6" fill="var(--color-mark-dot)" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  .mark {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mark__eyebrow {
+    font-size: var(--text-lg);
+    font-weight: 200;
+  }
+
+  /* Font-size lives here (not on .mark__line) so the toggle button below can
+     size/position itself in em/ch units against the same value. */
+  .mark__lines {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    font-size: clamp(2.25rem, 1.75rem + 3vw, 4rem);
+  }
+
+  .mark__line {
+    font-size: inherit;
+    font-weight: 700;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  .mark__gap {
+    visibility: hidden;
+  }
+
+  /* Stretches to the full height of the two stacked lines, so its top/bottom
+     land on the cap-height of PORTFOLIO and the baseline of the year — not a
+     guessed fraction of either line. Extra padding + negative margin gives a
+     touch-friendly hit area without changing the visual size. */
+  .mark__toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 1ch;
+    width: auto;
+    aspect-ratio: 31 / 109;
+    padding: var(--space-2);
+    margin: calc(var(--space-2) * -1) 0 calc(var(--space-2) * -1) calc(var(--space-2) * -1);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .mark__toggle svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (hover: hover) {
+    .mark__toggle:hover svg {
+      animation: mark-jiggle 0.4s ease;
+    }
+  }
+
+  @keyframes mark-jiggle {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-4deg);
+    }
+    75% {
+      transform: rotate(4deg);
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .mark {
+      align-items: center;
+    }
+  }
+</style>
+
+<script>
+  function onIdle(callback: () => void) {
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(callback);
+    } else {
+      setTimeout(callback, 200);
+    }
+  }
+
+  onIdle(async () => {
+    const toggle = document.querySelector<HTMLButtonElement>("[data-mark-toggle]");
+    const dot = document.querySelector<SVGCircleElement>("[data-mark-dot]");
+    const hero = document.querySelector<HTMLElement>("[data-hero]");
+    if (!toggle || !dot) return;
+
+    const { withMotion } = await import("@/lib/motion");
+
+    withMotion(({ gsap, reduced }) => {
+      const DOT_Y_PORTFOLIO = 26;
+      const DOT_Y_YEAR = 83;
+      let onYearRow = false;
+
+      toggle.addEventListener("click", () => {
+        onYearRow = !onYearRow;
+        toggle.setAttribute("aria-pressed", String(onYearRow));
+        hero?.toggleAttribute("data-flipped", onYearRow);
+
+        const targetY = onYearRow ? DOT_Y_YEAR : DOT_Y_PORTFOLIO;
+        if (reduced) {
+          gsap.set(dot, { attr: { cy: targetY } });
+        } else {
+          gsap.to(dot, { attr: { cy: targetY }, duration: 0.5, ease: "power2.inOut" });
+        }
+      });
+    });
+  });
+</script>
