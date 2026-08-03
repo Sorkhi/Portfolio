@@ -8,6 +8,10 @@
     {
       "pattern": "sorkhi.com",
       "custom_domain": true
+    },
+    {
+      "pattern": "www.sorkhi.com",
+      "custom_domain": true
     }
   ],
   "assets": {
