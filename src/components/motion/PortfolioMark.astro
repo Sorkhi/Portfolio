@@ -116,11 +116,38 @@ const yearRest = String(year).slice(2);
 </style>
 
 <script>
-  // Positions the toggle precisely against the *rendered ink* of the two
-  // text lines (via Range, not the CSS line-box, which has font-dependent
-  // padding above/below the glyphs that made em-based guesses unreliable):
-  // top = top of the PORTFOLIO line's glyphs, bottom = bottom of the year
-  // line's glyphs, horizontally centered on the hidden gap character.
+  // Range.getBoundingClientRect() (tried first) turned out NOT to give tight
+  // ink bounds — it reports the font's full ascent+descent box, which
+  // reserves headroom for ascenders/diacritics and descenders that this
+  // all-caps/digits text never uses (confirmed empirically: an 84px range
+  // height for text whose actual cap-height is 48px). That's what was
+  // pushing the capsule's top above the letters. Canvas measureText's
+  // actualBoundingBoxAscent/Descent give the true tight ink box for the
+  // specific rendered string instead of the font's reserved box.
+  const measureCanvas = document.createElement("canvas");
+  const measureCtx = measureCanvas.getContext("2d");
+
+  function measureInk(el: HTMLElement): { top: number; bottom: number } | null {
+    if (!measureCtx) return null;
+    const cs = getComputedStyle(el);
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const rect = range.getBoundingClientRect();
+    if (rect.height === 0) return null;
+
+    measureCtx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+    const metrics = measureCtx.measureText(el.textContent ?? "");
+    const baseline = rect.top + metrics.fontBoundingBoxAscent;
+
+    return {
+      top: baseline - metrics.actualBoundingBoxAscent,
+      bottom: baseline + metrics.actualBoundingBoxDescent,
+    };
+  }
+
+  // Positions the toggle against that tight ink box: top = top of the
+  // PORTFOLIO line's glyphs, bottom = bottom of the year line's glyphs,
+  // horizontally centered on the hidden gap character.
   function positionToggle() {
     const container = document.querySelector<HTMLElement>("[data-mark-lines]");
     const toggle = document.querySelector<HTMLButtonElement>("[data-mark-toggle]");
@@ -132,23 +159,17 @@ const yearRest = String(year).slice(2);
     const gapYear = yearLine.querySelector<HTMLElement>(".mark__gap");
     if (!gapPortfolio || !gapYear) return;
 
-    const portfolioRange = document.createRange();
-    portfolioRange.selectNodeContents(portfolioLine);
-    const portfolioRect = portfolioRange.getBoundingClientRect();
-
-    const yearRange = document.createRange();
-    yearRange.selectNodeContents(yearLine);
-    const yearRect = yearRange.getBoundingClientRect();
-
-    if (portfolioRect.height === 0 || yearRect.height === 0) return;
+    const portfolioInk = measureInk(portfolioLine);
+    const yearInk = measureInk(yearLine);
+    if (!portfolioInk || !yearInk) return;
 
     const gapPortfolioRect = gapPortfolio.getBoundingClientRect();
     const gapYearRect = gapYear.getBoundingClientRect();
     const centerX = (gapPortfolioRect.left + gapPortfolioRect.right + gapYearRect.left + gapYearRect.right) / 4;
 
     const containerRect = container.getBoundingClientRect();
-    const top = portfolioRect.top - containerRect.top;
-    const height = yearRect.bottom - portfolioRect.top;
+    const top = portfolioInk.top - containerRect.top;
+    const height = yearInk.bottom - portfolioInk.top;
     const width = height * (31 / 109);
     const left = centerX - containerRect.left - width / 2;
 
