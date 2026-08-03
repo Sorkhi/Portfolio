@@ -3,6 +3,13 @@
   "name": "sorkhi-portfolio",
   "compatibility_date": "2026-08-03",
   "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "sorkhi.com",
+      "custom_domain": true
+    }
+  ],
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS"
