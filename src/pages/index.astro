@@ -86,7 +86,7 @@ const bottomLinks = [
     align-items: center;
     justify-content: space-between;
     gap: var(--space-8);
-    padding: var(--space-8) var(--frame-margin);
+    padding: var(--space-12) var(--frame-margin);
     background-color: var(--color-bg);
     color: var(--color-fg);
     overflow: hidden;
@@ -96,13 +96,17 @@ const bottomLinks = [
   }
 
   /* Click-to-flip state from PortfolioMark's toggle — a bold color swap
-     instead of the subtle light/dark theme. Specificity beats the
+     instead of the subtle light/dark theme. Everything goes white except
+     the role label and the mark's ring, which go to a darker red so they
+     still read as an accent against the red background; the dot goes
+     white to stay visible against that darker ring. Specificity beats the
      [data-theme="light"] tokens regardless of stylesheet order. */
   .hero[data-flipped] {
     --color-bg: #d2232a;
     --color-fg: #ffffff;
-    --color-accent: #ffffff;
+    --color-accent: #841919;
     --color-accent-glow: rgb(255 255 255 / 25%);
+    --color-mark-dot: #ffffff;
   }
 
   .hero__nav {
@@ -120,6 +124,10 @@ const bottomLinks = [
     font-size: var(--text-sm);
     letter-spacing: 0.02em;
     transition: color var(--duration-base) var(--ease-out);
+  }
+
+  .hero__nav--top {
+    gap: var(--space-8);
   }
 
   .hero__nav--top a:hover {

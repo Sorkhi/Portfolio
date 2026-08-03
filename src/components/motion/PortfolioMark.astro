@@ -16,7 +16,7 @@ const yearRest = String(year).slice(2);
 
 <div class="mark">
   <span class="mark__eyebrow" aria-hidden="true">Résumé+</span>
-  <div class="mark__lines">
+  <div class="mark__lines" data-mark-lines>
     <span class="mark__line mark__line--portfolio" aria-hidden="true">
       P<span class="mark__gap">O</span>RTFOLIO
     </span>
@@ -74,9 +74,9 @@ const yearRest = String(year).slice(2);
     visibility: hidden;
   }
 
-  /* Stretches to the full height of the two stacked lines, so its top/bottom
-     land on the cap-height of PORTFOLIO and the baseline of the year — not a
-     guessed fraction of either line. Extra padding + negative margin gives a
+  /* Fallback position for the instant before the measurement script in the
+     <script> below runs (font metrics make a guessed em/ch offset
+     unreliable, see script). Extra padding + negative margin gives a
      touch-friendly hit area without changing the visual size. */
   .mark__toggle {
     position: absolute;
@@ -90,30 +90,37 @@ const yearRest = String(year).slice(2);
     background: none;
     border: none;
     cursor: pointer;
+    box-sizing: content-box;
   }
 
   .mark__toggle svg {
     display: block;
     width: 100%;
     height: 100%;
+    overflow: visible;
+  }
+
+  .mark__toggle svg path {
+    transition: fill var(--duration-flip) var(--ease-out);
+  }
+
+  .mark__dot {
+    transition: fill var(--duration-flip) var(--ease-out);
   }
 
   @media (hover: hover) {
-    .mark__toggle:hover svg {
-      animation: mark-jiggle 0.4s ease;
+    .mark__toggle:hover .mark__dot {
+      animation: dot-nudge 0.6s ease-in-out infinite;
     }
   }
 
-  @keyframes mark-jiggle {
+  @keyframes dot-nudge {
     0%,
     100% {
-      transform: rotate(0deg);
+      transform: translateY(0);
     }
-    25% {
-      transform: rotate(-4deg);
-    }
-    75% {
-      transform: rotate(4deg);
+    50% {
+      transform: translateY(-0.35em);
     }
   }
 
@@ -123,6 +130,60 @@ const yearRest = String(year).slice(2);
     }
   }
 </style>
+
+<script>
+  // Positions the toggle precisely against the *rendered ink* of the two
+  // text lines (via Range, not the CSS line-box, which has font-dependent
+  // padding above/below the glyphs that made em-based guesses unreliable):
+  // top = top of the PORTFOLIO line's glyphs, bottom = bottom of the year
+  // line's glyphs, horizontally centered on the hidden gap character.
+  function positionToggle() {
+    const container = document.querySelector<HTMLElement>("[data-mark-lines]");
+    const toggle = document.querySelector<HTMLButtonElement>("[data-mark-toggle]");
+    const portfolioLine = document.querySelector<HTMLElement>(".mark__line--portfolio");
+    const yearLine = document.querySelector<HTMLElement>(".mark__line--year");
+    if (!container || !toggle || !portfolioLine || !yearLine) return;
+
+    const gapPortfolio = portfolioLine.querySelector<HTMLElement>(".mark__gap");
+    const gapYear = yearLine.querySelector<HTMLElement>(".mark__gap");
+    if (!gapPortfolio || !gapYear) return;
+
+    const portfolioRange = document.createRange();
+    portfolioRange.selectNodeContents(portfolioLine);
+    const portfolioRect = portfolioRange.getBoundingClientRect();
+
+    const yearRange = document.createRange();
+    yearRange.selectNodeContents(yearLine);
+    const yearRect = yearRange.getBoundingClientRect();
+
+    if (portfolioRect.height === 0 || yearRect.height === 0) return;
+
+    const gapPortfolioRect = gapPortfolio.getBoundingClientRect();
+    const gapYearRect = gapYear.getBoundingClientRect();
+    const centerX = (gapPortfolioRect.left + gapPortfolioRect.right + gapYearRect.left + gapYearRect.right) / 4;
+
+    const containerRect = container.getBoundingClientRect();
+    const top = portfolioRect.top - containerRect.top;
+    const height = yearRect.bottom - portfolioRect.top;
+    const width = height * (31 / 109);
+    const left = centerX - containerRect.left - width / 2;
+
+    toggle.style.top = `${top}px`;
+    toggle.style.height = `${height}px`;
+    toggle.style.left = `${left}px`;
+    toggle.style.width = `${width}px`;
+    toggle.style.bottom = "auto";
+  }
+
+  positionToggle();
+  document.fonts?.ready?.then(positionToggle);
+
+  let resizeTimer: ReturnType<typeof setTimeout>;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(positionToggle, 100);
+  });
+</script>
 
 <script>
   function onIdle(callback: () => void) {

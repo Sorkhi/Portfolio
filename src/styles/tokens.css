@@ -94,6 +94,11 @@
   inherits: true;
   initial-value: #d2232a;
 }
+@property --color-mark-dot {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #000000;
+}
 
 :root,
 [data-theme="light"] {
@@ -104,9 +109,9 @@
   --color-border: #d9d3c7;
   --color-accent: #d2232a;
   --color-accent-glow: rgb(210 35 42 / 35%);
-  /* Constant "ink" for the portfolio-mark toggle dot — deliberately not part
-     of the flip/theme swap so it always reads against whatever the ring
-     color is. */
+  /* Ink for the portfolio-mark toggle dot — kept separate from --color-fg
+     so it can be tuned independently of general text (see the .hero
+     flipped-state override, where it goes white against the darker ring). */
   --color-mark-dot: #000000;
 }
 
