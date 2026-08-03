@@ -1,0 +1,91 @@
+---
+// Recreation of the print registration-mark frame (legacy/images/Frame.svg) as
+// independently-positioned marks instead of one stretched SVG. Each mark hugs its
+// own corner/edge with a viewport-proportional margin (--frame-margin), so it stays
+// correct at any aspect ratio instead of being letterboxed to the original 1684:963
+// canvas.
+---
+
+<div class="frame" aria-hidden="true">
+  <svg class="frame__corner frame__corner--tl" viewBox="0 0 28 28">
+    <path d="M27 1 H5 M1 5 V27" />
+  </svg>
+  <svg class="frame__corner frame__corner--tr" viewBox="0 0 28 28">
+    <path d="M27 1 H5 M1 5 V27" />
+  </svg>
+  <svg class="frame__corner frame__corner--br" viewBox="0 0 28 28">
+    <path d="M27 1 H5 M1 5 V27" />
+  </svg>
+  <svg class="frame__corner frame__corner--bl" viewBox="0 0 28 28">
+    <path d="M27 1 H5 M1 5 V27" />
+  </svg>
+
+  <svg class="frame__tick frame__tick--left" viewBox="0 0 12 30">
+    <path d="M1 1 V12 M1 18 V29 M1 15 H9" />
+  </svg>
+  <svg class="frame__tick frame__tick--right" viewBox="0 0 12 30">
+    <path d="M1 1 V12 M1 18 V29 M1 15 H9" />
+  </svg>
+</div>
+
+<style>
+  .frame {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .frame__corner,
+  .frame__tick {
+    position: absolute;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .frame__corner {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .frame__corner--tl {
+    top: var(--frame-margin);
+    left: var(--frame-margin);
+  }
+
+  .frame__corner--tr {
+    top: var(--frame-margin);
+    right: var(--frame-margin);
+    transform: rotate(90deg);
+  }
+
+  .frame__corner--br {
+    bottom: var(--frame-margin);
+    right: var(--frame-margin);
+    transform: rotate(180deg);
+  }
+
+  .frame__corner--bl {
+    bottom: var(--frame-margin);
+    left: var(--frame-margin);
+    transform: rotate(270deg);
+  }
+
+  .frame__tick {
+    width: 0.75rem;
+    height: 1.875rem;
+    top: 50%;
+  }
+
+  .frame__tick--left {
+    left: var(--frame-margin);
+    transform: translateY(-50%);
+  }
+
+  .frame__tick--right {
+    right: var(--frame-margin);
+    transform: translateY(-50%) scaleX(-1);
+  }
+</style>

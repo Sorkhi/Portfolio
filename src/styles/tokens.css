@@ -39,6 +39,9 @@
   --content-max-width: 76rem;
   --grid-gutter: var(--space-6);
   --rule-width: 1px;
+  /* Distance the corner/edge registration marks keep from the viewport
+     edge — scales with viewport instead of a fixed pixel gutter. */
+  --frame-margin: clamp(1rem, 4vw, 2.5rem);
 
   /* Radii — kept minimal for an editorial, typographic feel */
   --radius-none: 0px;
@@ -54,6 +57,7 @@
   /* Z-index scale */
   --z-header: 100;
   --z-overlay: 200;
+  --z-cursor: 300;
 }
 
 /* Color tokens are @property-registered so they can be transitioned
@@ -87,17 +91,18 @@
 @property --color-accent {
   syntax: "<color>";
   inherits: true;
-  initial-value: #a8422f;
+  initial-value: #d2232a;
 }
 
 :root,
 [data-theme="light"] {
-  --color-bg: #fbfaf8;
+  --color-bg: #ffffff;
   --color-surface: #ffffff;
-  --color-fg: #17140f;
+  --color-fg: #000000;
   --color-muted: #6b6459;
   --color-border: #d9d3c7;
-  --color-accent: #a8422f;
+  --color-accent: #d2232a;
+  --color-accent-glow: rgb(210 35 42 / 35%);
 }
 
 [data-theme="dark"] {
@@ -106,7 +111,8 @@
   --color-fg: #f2efe9;
   --color-muted: #9b9488;
   --color-border: #2c2a26;
-  --color-accent: #d97a5f;
+  --color-accent: #ff5b50;
+  --color-accent-glow: rgb(255 91 80 / 35%);
 }
 
 /* No-JS / pre-hydration fallback only — once the inline bootstrap script in
@@ -119,6 +125,7 @@
     --color-fg: #f2efe9;
     --color-muted: #9b9488;
     --color-border: #2c2a26;
-    --color-accent: #d97a5f;
+    --color-accent: #ff5b50;
+    --color-accent-glow: rgb(255 91 80 / 35%);
   }
 }

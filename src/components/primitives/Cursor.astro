@@ -1,0 +1,65 @@
+---
+// Faint red radial-gradient glow that trails the pointer. Native cursor stays as-is —
+// this only adds an ambient glow layer beneath it.
+---
+
+<div class="cursor-glow" data-cursor-glow aria-hidden="true"></div>
+
+<style>
+  .cursor-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 26rem;
+    height: 26rem;
+    margin-top: -13rem;
+    margin-left: -13rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--color-accent-glow), transparent 70%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: var(--z-cursor);
+    will-change: transform, opacity;
+    transition: opacity var(--duration-slow) var(--ease-out);
+  }
+
+  @media (pointer: coarse) {
+    .cursor-glow {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  function onIdle(callback: () => void) {
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(callback);
+    } else {
+      setTimeout(callback, 200);
+    }
+  }
+
+  onIdle(async () => {
+    const glow = document.querySelector<HTMLElement>("[data-cursor-glow]");
+    if (!glow || window.matchMedia("(pointer: coarse)").matches) return;
+
+    const { withMotion } = await import("@/lib/motion");
+
+    withMotion(({ gsap, reduced }) => {
+      if (reduced) return;
+
+      const moveX = gsap.quickTo(glow, "x", { duration: 0.5, ease: "power3" });
+      const moveY = gsap.quickTo(glow, "y", { duration: 0.5, ease: "power3" });
+
+      window.addEventListener("pointermove", (event) => {
+        glow.style.opacity = "1";
+        moveX(event.clientX);
+        moveY(event.clientY);
+      });
+
+      window.addEventListener("pointerleave", () => {
+        glow.style.opacity = "0";
+      });
+    });
+  });
+</script>
