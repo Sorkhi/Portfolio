@@ -1,11 +1,11 @@
 ---
-// Cursor-following "watercolor stain" reveal. The SVG feTurbulence/
-// feDisplacementMap approach tried earlier produced a jagged, torn-paper
-// edge instead of a soft painterly one — pixel noise reads as static, not
-// watercolor. This uses the classic organic-blob technique instead: an
-// asymmetric border-radius (a closed, smoothly curved shape, not a mask)
-// that slowly morphs between a few states, blurred for soft edges. No
-// noise, so it can't look jagged — only smooth curves are possible.
+// Cursor-following reveal. Now grounded in the actual reference video
+// (extracted frames, since neither the SVG-turbulence nor the smooth-blob
+// attempts before this matched it): the real effect is a halftone/stipple
+// dot cluster with a gritty, speckled edge — not a smooth blob, not a
+// wobbly noise blob. It's approximated here with a repeating dot pattern
+// intersected with a soft radial falloff, so dots are dense in the center
+// and thin out to scattered specks at the edge.
 // It reveals the *other* theme's color at the pointer — red by default, as
 // if the flipped theme were underneath; white once flipped, the reverse —
 // and reverses again when the mark is clicked.
@@ -18,39 +18,26 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 20rem;
-    height: 20rem;
-    margin-top: -10rem;
-    margin-left: -10rem;
-    background: radial-gradient(
-      circle at 50% 50%,
-      var(--color-hover-reveal) 0%,
-      var(--color-hover-reveal) 55%,
-      transparent 100%
-    );
-    border-radius: 42% 58% 65% 35% / 45% 45% 55% 55%;
-    filter: blur(20px);
+    width: 22rem;
+    height: 22rem;
+    margin-top: -11rem;
+    margin-left: -11rem;
+    background: var(--color-hover-reveal);
+    -webkit-mask-image:
+      radial-gradient(circle at center, black 0%, black 45%, transparent 78%),
+      repeating-radial-gradient(circle at center, black 0px, black 1.6px, transparent 1.6px, transparent 5.5px);
+    mask-image:
+      radial-gradient(circle at center, black 0%, black 45%, transparent 78%),
+      repeating-radial-gradient(circle at center, black 0px, black 1.6px, transparent 1.6px, transparent 5.5px);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
     opacity: 0;
     pointer-events: none;
     z-index: var(--z-cursor);
     will-change: transform, opacity;
-    animation: cursor-blob-morph 9s ease-in-out infinite;
     transition:
       opacity var(--duration-slow) var(--ease-out),
       background-color var(--duration-flip) var(--ease-out);
-  }
-
-  @keyframes cursor-blob-morph {
-    0%,
-    100% {
-      border-radius: 42% 58% 65% 35% / 45% 45% 55% 55%;
-    }
-    33% {
-      border-radius: 60% 40% 40% 60% / 55% 60% 40% 45%;
-    }
-    66% {
-      border-radius: 48% 52% 58% 42% / 62% 44% 56% 38%;
-    }
   }
 
   @media (pointer: coarse) {
