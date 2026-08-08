@@ -19,14 +19,13 @@ const bottomLinks = [
   {
     label: "Portfolio",
     href: "https://drive.google.com/file/d/1PpHNjVwOGVOztWJ4ziVrCeRyIz9g1lmb/view?usp=drivesdk",
+    external: true,
   },
-  {
-    label: "Curriculum Vitae",
-    href: "https://drive.google.com/file/d/1E9Nyd_ZEQ5h5Kg7KAtv_JDlbbBWFalRz/view?usp=drivesdk",
-  },
+  { label: "Curriculum Vitae", href: "/cv" },
   {
     label: "Catalogs/Videos",
     href: "https://drive.google.com/drive/folders/1bn-NoPz90lHYAh6k2MmZD0pc65_9ntRP",
+    external: true,
   },
 ];
 ---
@@ -68,7 +67,7 @@ const bottomLinks = [
     <nav class="hero__nav hero__nav--bottom" aria-label="Sections">
       {
         bottomLinks.map((link) => (
-          <a href={link.href} target="_blank" rel="noreferrer">
+          <a href={link.href} target={link.external ? "_blank" : undefined} rel={link.external ? "noreferrer" : undefined}>
             {link.label}
           </a>
         ))
@@ -107,13 +106,14 @@ const bottomLinks = [
     --color-accent: #841919;
     --color-accent-glow: rgb(255 255 255 / 25%);
     --color-mark-dot: #ffffff;
+    --color-hover-reveal: #ffffff;
   }
 
   /* The role label and mark ring are a dark red on red (low contrast by
-     design), so drop the cursor glow behind them in this state — it's a
-     light glow, so wherever it sits it lifts that text's contrast instead
-     of just sitting on top of it. */
-  .hero[data-flipped] :global(.cursor-glow) {
+     design), so drop the cursor reveal behind them in this state — it's
+     light, so wherever it sits it lifts that text's contrast instead of
+     just sitting on top of it. */
+  .hero[data-flipped] :global(.cursor-reveal) {
     z-index: 0;
   }
 

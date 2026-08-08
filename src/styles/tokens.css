@@ -99,6 +99,11 @@
   inherits: true;
   initial-value: #000000;
 }
+@property --color-hover-reveal {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #d2232a;
+}
 
 :root,
 [data-theme="light"] {
@@ -109,10 +114,16 @@
   --color-border: #d9d3c7;
   --color-accent: #d2232a;
   --color-accent-glow: rgb(210 35 42 / 35%);
+  /* Section-header chip background on the CV page — a pale accent tint
+     behind the accent-colored label text (see printed CV reference). */
+  --color-chip-bg: #f7dbd9;
   /* Ink for the portfolio-mark toggle dot — kept separate from --color-fg
      so it can be tuned independently of general text (see the .hero
      flipped-state override, where it goes white against the darker ring). */
   --color-mark-dot: #000000;
+  /* Cursor-reveal color — the "other" theme's color, so hovering reads as
+     that theme peeking through. Flips to white in .hero[data-flipped]. */
+  --color-hover-reveal: var(--color-accent);
 }
 
 [data-theme="dark"] {
@@ -123,7 +134,9 @@
   --color-border: #2c2a26;
   --color-accent: #ff5b50;
   --color-accent-glow: rgb(255 91 80 / 35%);
+  --color-chip-bg: #3a201d;
   --color-mark-dot: #000000;
+  --color-hover-reveal: var(--color-accent);
 }
 
 /* No-JS / pre-hydration fallback only — once the inline bootstrap script in
