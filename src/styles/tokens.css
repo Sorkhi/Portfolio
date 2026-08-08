@@ -98,11 +98,6 @@
   inherits: true;
   initial-value: #000000;
 }
-@property --color-hover-reveal {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: #d2232a;
-}
 
 :root,
 [data-theme="light"] {
@@ -120,9 +115,6 @@
      so it can be tuned independently of general text (see the .hero
      flipped-state override, where it goes white against the darker ring). */
   --color-mark-dot: #000000;
-  /* Cursor-reveal color — the "other" theme's color, so hovering reads as
-     that theme peeking through. Flips to white in .hero[data-flipped]. */
-  --color-hover-reveal: var(--color-accent);
 }
 
 [data-theme="dark"] {
@@ -135,7 +127,6 @@
   --color-accent-glow: rgb(255 91 80 / 35%);
   --color-chip-bg: #3a201d;
   --color-mark-dot: #000000;
-  --color-hover-reveal: var(--color-accent);
 }
 
 /* No-JS / pre-hydration fallback only — once the inline bootstrap script in

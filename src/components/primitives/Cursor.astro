@@ -2,10 +2,13 @@
 // Liquid/gooey cursor blob: a small cluster of circles trailing the
 // pointer at increasing lag, merged into one liquid shape via the classic
 // SVG "goo" filter (blur + alpha-contrast threshold, so overlapping blurred
-// circles fuse solid while their lone edges stay soft). Reveals the
-// *other* theme's color — red by default, as if the flipped theme were
-// underneath; white once flipped, the reverse — and reverses again when
-// the mark is clicked.
+// circles fuse solid while their lone edges stay soft).
+//
+// The blob itself is plain white with mix-blend-mode: difference, sitting
+// ABOVE the content — difference-blending white against black text turns
+// it white, and against a white background turns it black, i.e. wherever
+// it passes over content, that content shows the *other* theme's colors
+// in place, without needing a duplicated/cloned copy of the page to reveal.
 ---
 
 <div class="cursor-blob-wrap" data-cursor-blob-wrap aria-hidden="true">
@@ -34,11 +37,11 @@
     position: fixed;
     inset: 0;
     pointer-events: none;
-    /* Sits behind the actual page content (nav/name/mark all use z-index:
-       2) in every theme, not just when flipped — it's a background wash,
-       never meant to sit over the text. */
-    z-index: 1;
+    /* Above the page content (nav/name/mark all use z-index: 2) — the
+       difference blend needs to sit on top of whatever it's inverting. */
+    z-index: 3;
     filter: url(#cursor-goo);
+    mix-blend-mode: difference;
     opacity: 0;
     will-change: opacity;
     transition: opacity var(--duration-slow) var(--ease-out);
@@ -49,13 +52,15 @@
     top: 0;
     left: 0;
     border-radius: 50%;
-    background: var(--color-hover-reveal);
+    /* Always plain white: mix-blend-mode: difference against white gives
+       black, against black gives white, which is the whole trick — the
+       blob's own color never needs to track the flip state. */
+    background: #ffffff;
     /* Centering is set via gsap.set({ xPercent: -50, yPercent: -50 }) in
        the script below, not a CSS transform — GSAP owns the transform
        property once quickTo animates x/y on this element, so a
        CSS-authored translate(-50%,-50%) here would just get clobbered. */
     will-change: transform;
-    transition: background-color var(--duration-flip) var(--ease-out);
   }
 
   .cursor-blob--0 {
