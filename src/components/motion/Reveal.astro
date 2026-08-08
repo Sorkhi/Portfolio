@@ -14,13 +14,7 @@ const { as: Tag = "div", class: className } = Astro.props;
 <script>
   // GSAP + plugins are ~140kb — never let them sit on the critical path.
   // Fetch and init only once the browser is idle after first paint.
-  function onIdle(callback: () => void) {
-    if ("requestIdleCallback" in window) {
-      window.requestIdleCallback(callback);
-    } else {
-      setTimeout(callback, 200);
-    }
-  }
+  import { onIdle } from "@/lib/motion/on-idle";
 
   onIdle(async () => {
     const { withMotion } = await import("@/lib/motion");

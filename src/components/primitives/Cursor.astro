@@ -1,81 +1,117 @@
 ---
-// Cursor-following reveal. Now grounded in the actual reference video
-// (extracted frames, since neither the SVG-turbulence nor the smooth-blob
-// attempts before this matched it): the real effect is a halftone/stipple
-// dot cluster with a gritty, speckled edge — not a smooth blob, not a
-// wobbly noise blob. It's approximated here with a repeating dot pattern
-// intersected with a soft radial falloff, so dots are dense in the center
-// and thin out to scattered specks at the edge.
-// It reveals the *other* theme's color at the pointer — red by default, as
-// if the flipped theme were underneath; white once flipped, the reverse —
-// and reverses again when the mark is clicked.
+// Liquid/gooey cursor blob: a small cluster of circles trailing the
+// pointer at increasing lag, merged into one liquid shape via the classic
+// SVG "goo" filter (blur + alpha-contrast threshold, so overlapping blurred
+// circles fuse solid while their lone edges stay soft). Reveals the
+// *other* theme's color — red by default, as if the flipped theme were
+// underneath; white once flipped, the reverse — and reverses again when
+// the mark is clicked.
 ---
 
-<div class="cursor-reveal" data-cursor-reveal aria-hidden="true"></div>
+<div class="cursor-blob-wrap" data-cursor-blob-wrap aria-hidden="true">
+  <div class="cursor-blob cursor-blob--0" data-cursor-blob></div>
+  <div class="cursor-blob cursor-blob--1" data-cursor-blob></div>
+  <div class="cursor-blob cursor-blob--2" data-cursor-blob></div>
+  <div class="cursor-blob cursor-blob--3" data-cursor-blob></div>
+</div>
+
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+  <filter id="cursor-goo">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur" />
+    <feColorMatrix
+      in="blur"
+      mode="matrix"
+      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9"
+      result="goo"
+    />
+    <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+  </filter>
+</svg>
 
 <style>
-  .cursor-reveal {
+  .cursor-blob-wrap {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 22rem;
-    height: 22rem;
-    margin-top: -11rem;
-    margin-left: -11rem;
-    background: var(--color-hover-reveal);
-    -webkit-mask-image:
-      radial-gradient(circle at center, black 0%, black 45%, transparent 78%),
-      repeating-radial-gradient(circle at center, black 0px, black 1.6px, transparent 1.6px, transparent 5.5px);
-    mask-image:
-      radial-gradient(circle at center, black 0%, black 45%, transparent 78%),
-      repeating-radial-gradient(circle at center, black 0px, black 1.6px, transparent 1.6px, transparent 5.5px);
-    -webkit-mask-composite: source-in;
-    mask-composite: intersect;
-    opacity: 0;
+    inset: 0;
     pointer-events: none;
     z-index: var(--z-cursor);
-    will-change: transform, opacity;
-    transition:
-      opacity var(--duration-slow) var(--ease-out),
-      background-color var(--duration-flip) var(--ease-out);
+    filter: url(#cursor-goo);
+    opacity: 0;
+    will-change: opacity;
+    transition: opacity var(--duration-slow) var(--ease-out);
+  }
+
+  .cursor-blob {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    background: var(--color-hover-reveal);
+    /* Centering is set via gsap.set({ xPercent: -50, yPercent: -50 }) in
+       the script below, not a CSS transform — GSAP owns the transform
+       property once quickTo animates x/y on this element, so a
+       CSS-authored translate(-50%,-50%) here would just get clobbered. */
+    will-change: transform;
+    transition: background-color var(--duration-flip) var(--ease-out);
+  }
+
+  .cursor-blob--0 {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+  .cursor-blob--1 {
+    width: 3.6rem;
+    height: 3.6rem;
+  }
+  .cursor-blob--2 {
+    width: 2.8rem;
+    height: 2.8rem;
+  }
+  .cursor-blob--3 {
+    width: 2rem;
+    height: 2rem;
   }
 
   @media (pointer: coarse) {
-    .cursor-reveal {
+    .cursor-blob-wrap {
       display: none;
     }
   }
 </style>
 
 <script>
-  function onIdle(callback: () => void) {
-    if ("requestIdleCallback" in window) {
-      window.requestIdleCallback(callback);
-    } else {
-      setTimeout(callback, 200);
-    }
-  }
+  import { onIdle } from "@/lib/motion/on-idle";
 
   onIdle(async () => {
-    const reveal = document.querySelector<HTMLElement>("[data-cursor-reveal]");
-    if (!reveal || window.matchMedia("(pointer: coarse)").matches) return;
+    const wrap = document.querySelector<HTMLElement>("[data-cursor-blob-wrap]");
+    const blobs = document.querySelectorAll<HTMLElement>("[data-cursor-blob]");
+    if (!wrap || blobs.length === 0 || window.matchMedia("(pointer: coarse)").matches) return;
 
     const { withMotion } = await import("@/lib/motion");
 
     withMotion(({ gsap, reduced }) => {
       if (reduced) return;
 
-      const moveX = gsap.quickTo(reveal, "x", { duration: 0.45, ease: "power3" });
-      const moveY = gsap.quickTo(reveal, "y", { duration: 0.45, ease: "power3" });
+      gsap.set(blobs, { xPercent: -50, yPercent: -50 });
+
+      // Each blob eases toward the same pointer position but at increasing
+      // duration, so later (smaller) blobs lag further behind — that lag is
+      // what the goo filter reads as a liquid trail stretching back toward
+      // the cursor, not just a static cluster.
+      const movers = Array.from(blobs).map((el, i) => ({
+        x: gsap.quickTo(el, "x", { duration: 0.3 + i * 0.12, ease: "power3" }),
+        y: gsap.quickTo(el, "y", { duration: 0.3 + i * 0.12, ease: "power3" }),
+      }));
 
       window.addEventListener("pointermove", (event) => {
-        reveal.style.opacity = "1";
-        moveX(event.clientX);
-        moveY(event.clientY);
+        wrap.style.opacity = "1";
+        for (const mover of movers) {
+          mover.x(event.clientX);
+          mover.y(event.clientY);
+        }
       });
 
       window.addEventListener("pointerleave", () => {
-        reveal.style.opacity = "0";
+        wrap.style.opacity = "0";
       });
     });
   });

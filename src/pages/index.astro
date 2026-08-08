@@ -110,10 +110,10 @@ const bottomLinks = [
   }
 
   /* The role label and mark ring are a dark red on red (low contrast by
-     design), so drop the cursor reveal behind them in this state — it's
+     design), so drop the cursor blob behind them in this state — it's
      light, so wherever it sits it lifts that text's contrast instead of
      just sitting on top of it. */
-  .hero[data-flipped] :global(.cursor-reveal) {
+  .hero[data-flipped] :global(.cursor-blob-wrap) {
     z-index: 0;
   }
 

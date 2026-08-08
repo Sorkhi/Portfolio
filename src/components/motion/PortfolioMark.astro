@@ -199,13 +199,7 @@ const yearRest = String(year).slice(2);
 </script>
 
 <script>
-  function onIdle(callback: () => void) {
-    if ("requestIdleCallback" in window) {
-      window.requestIdleCallback(callback);
-    } else {
-      setTimeout(callback, 200);
-    }
-  }
+  import { onIdle } from "@/lib/motion/on-idle";
 
   onIdle(async () => {
     const toggle = document.querySelector<HTMLButtonElement>("[data-mark-toggle]");
