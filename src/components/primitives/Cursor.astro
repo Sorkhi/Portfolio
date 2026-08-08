@@ -1,17 +1,20 @@
 ---
-// Cursor-following reveal with a soft, irregular "watercolor" edge (an SVG
-// feTurbulence/feDisplacementMap filter distorting a masked blob) instead of
-// a plain circular gradient. It reveals the *other* theme's color at the
-// pointer — red in the default state, white once flipped — so it reads as
-// the flip-side peeking through, and reverses when the mark is clicked.
+// Cursor-following reveal with an irregular "watercolor stain" edge, not a
+// plain circular gradient. Two layers do the work: a mask built from a
+// cluster of offset blobs (not one circle) gives it an organic base shape,
+// then an SVG filter (feTurbulence + feDisplacementMap) bends that shape's
+// edges further so it reads as a bleeding ink/watercolor stain rather than
+// a soft-focus dot. It reveals the *other* theme's color at the pointer —
+// red by default, as if the flipped theme were underneath; white once
+// flipped, the reverse — and reverses again when the mark is clicked.
 ---
 
 <div class="cursor-reveal" data-cursor-reveal aria-hidden="true"></div>
 
 <svg width="0" height="0" style="position: absolute" aria-hidden="true">
-  <filter id="cursor-reveal-edge" x="-50%" y="-50%" width="200%" height="200%">
-    <feTurbulence type="fractalNoise" baseFrequency="0.015 0.025" numOctaves="2" seed="7" result="noise" />
-    <feDisplacementMap in="SourceGraphic" in2="noise" scale="34" xChannelSelector="R" yChannelSelector="G" />
+  <filter id="cursor-reveal-edge" x="-80%" y="-80%" width="260%" height="260%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="3" seed="11" result="noise" />
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="90" xChannelSelector="R" yChannelSelector="G" />
   </filter>
 </svg>
 
@@ -25,8 +28,20 @@
     margin-top: -15rem;
     margin-left: -15rem;
     background: var(--color-hover-reveal);
-    -webkit-mask-image: radial-gradient(circle, black 0%, black 45%, transparent 72%);
-    mask-image: radial-gradient(circle, black 0%, black 45%, transparent 72%);
+    /* A cluster of offset blobs, not one circle — the organic base shape
+       the filter below then distorts further. */
+    -webkit-mask-image:
+      radial-gradient(circle at 40% 38%, black 42%, transparent 78%),
+      radial-gradient(circle at 63% 45%, black 38%, transparent 75%),
+      radial-gradient(circle at 48% 65%, black 40%, transparent 76%),
+      radial-gradient(circle at 60% 68%, black 32%, transparent 70%),
+      radial-gradient(circle at 50% 52%, black 20%, transparent 55%);
+    mask-image:
+      radial-gradient(circle at 40% 38%, black 42%, transparent 78%),
+      radial-gradient(circle at 63% 45%, black 38%, transparent 75%),
+      radial-gradient(circle at 48% 65%, black 40%, transparent 76%),
+      radial-gradient(circle at 60% 68%, black 32%, transparent 70%),
+      radial-gradient(circle at 50% 52%, black 20%, transparent 55%);
     filter: url(#cursor-reveal-edge);
     opacity: 0;
     pointer-events: none;
