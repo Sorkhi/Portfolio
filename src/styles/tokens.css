@@ -58,7 +58,6 @@
   /* Z-index scale */
   --z-header: 100;
   --z-overlay: 200;
-  --z-cursor: 300;
 }
 
 /* Color tokens are @property-registered so they can be transitioned

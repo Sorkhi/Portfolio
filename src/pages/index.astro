@@ -27,6 +27,11 @@ const bottomLinks = [
     href: "https://drive.google.com/drive/folders/1bn-NoPz90lHYAh6k2MmZD0pc65_9ntRP",
     external: true,
   },
+  {
+    label: "Design Project Inquiry",
+    href: "https://docs.google.com/forms/d/e/1FAIpQLSfccLTFJHY2sfVDlaO5qd3u3F4NXUF3Z4SpNSJWerWIoBHXqA/viewform?usp=dialog",
+    external: true,
+  },
 ];
 ---
 
@@ -107,14 +112,6 @@ const bottomLinks = [
     --color-accent-glow: rgb(255 255 255 / 25%);
     --color-mark-dot: #ffffff;
     --color-hover-reveal: #ffffff;
-  }
-
-  /* The role label and mark ring are a dark red on red (low contrast by
-     design), so drop the cursor blob behind them in this state — it's
-     light, so wherever it sits it lifts that text's contrast instead of
-     just sitting on top of it. */
-  .hero[data-flipped] :global(.cursor-blob-wrap) {
-    z-index: 0;
   }
 
   .hero__nav {

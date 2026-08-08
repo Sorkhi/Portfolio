@@ -13,15 +13,16 @@
   <div class="cursor-blob cursor-blob--1" data-cursor-blob></div>
   <div class="cursor-blob cursor-blob--2" data-cursor-blob></div>
   <div class="cursor-blob cursor-blob--3" data-cursor-blob></div>
+  <div class="cursor-blob cursor-blob--4" data-cursor-blob></div>
 </div>
 
 <svg width="0" height="0" style="position: absolute" aria-hidden="true">
   <filter id="cursor-goo">
-    <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur" />
+    <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur" />
     <feColorMatrix
       in="blur"
       mode="matrix"
-      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9"
+      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 26 -11"
       result="goo"
     />
     <feComposite in="SourceGraphic" in2="goo" operator="atop" />
@@ -33,7 +34,10 @@
     position: fixed;
     inset: 0;
     pointer-events: none;
-    z-index: var(--z-cursor);
+    /* Sits behind the actual page content (nav/name/mark all use z-index:
+       2) in every theme, not just when flipped — it's a background wash,
+       never meant to sit over the text. */
+    z-index: 1;
     filter: url(#cursor-goo);
     opacity: 0;
     will-change: opacity;
@@ -70,6 +74,10 @@
     width: 2rem;
     height: 2rem;
   }
+  .cursor-blob--4 {
+    width: 1.3rem;
+    height: 1.3rem;
+  }
 
   @media (pointer: coarse) {
     .cursor-blob-wrap {
@@ -94,12 +102,12 @@
       gsap.set(blobs, { xPercent: -50, yPercent: -50 });
 
       // Each blob eases toward the same pointer position but at increasing
-      // duration, so later (smaller) blobs lag further behind — that lag is
-      // what the goo filter reads as a liquid trail stretching back toward
-      // the cursor, not just a static cluster.
+      // duration, so later (smaller) blobs lag well behind — that lag,
+      // stretched further apart here than the first pass, is what reads as
+      // a thinner, more fluid trail instead of a tight cluster.
       const movers = Array.from(blobs).map((el, i) => ({
-        x: gsap.quickTo(el, "x", { duration: 0.3 + i * 0.12, ease: "power3" }),
-        y: gsap.quickTo(el, "y", { duration: 0.3 + i * 0.12, ease: "power3" }),
+        x: gsap.quickTo(el, "x", { duration: 0.28 + i * 0.22, ease: "power2.out" }),
+        y: gsap.quickTo(el, "y", { duration: 0.28 + i * 0.22, ease: "power2.out" }),
       }));
 
       window.addEventListener("pointermove", (event) => {
