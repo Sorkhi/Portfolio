@@ -46,6 +46,12 @@ const yearRest = String(year).slice(2);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    /* .hero__row sets text-align: center on mobile, which is inherited
+       here — text-align (unlike align-items) affects text position
+       *within* each line's own box, not just the box's position, and
+       would re-break the shared-capsule alignment the same way centering
+       the flex items did. Always override back to left. */
+    text-align: left;
   }
 
   .mark__eyebrow {
@@ -108,11 +114,13 @@ const yearRest = String(year).slice(2);
     transition: fill var(--duration-flip) var(--ease-out);
   }
 
-  @media (max-width: 40rem) {
-    .mark {
-      align-items: center;
-    }
-  }
+  /* Deliberately NOT centered on narrow viewports even though the rest of
+     the mobile layout is: the two mark lines share one capsule glyph
+     positioned by character index (see script below). Centering each line
+     independently would center them at different offsets (they're
+     different lengths), knocking the shared glyph off both O/0 positions
+     at once. Left alignment keeps both lines starting at the same x, so
+     the same character index lines up between them, same as desktop. */
 </style>
 
 <script>
@@ -184,16 +192,20 @@ const yearRest = String(year).slice(2);
   // ResizeObserver tick reliably guarantees the browser has actually
   // completed a layout pass with the final font/CSS applied — in practice
   // any of them can still read pre-swap metrics for a moment. Rather than
-  // depend on one signal, re-measure on all of them, plus a short burst of
+  // depend on one signal, re-measure on all of them, plus a burst of
   // retries after load: each call is cheap (a couple getBoundingClientRect
-  // reads) and idempotent, so over-calling it is harmless.
+  // reads) and idempotent, so over-calling it is harmless. Also re-run on
+  // astro:page-load, since ClientRouter (view transitions) swaps the DOM
+  // back in after navigating here and that can land after the retry burst
+  // below finishes.
   const observedContainer = document.querySelector<HTMLElement>("[data-mark-lines]");
   if (observedContainer) {
     new ResizeObserver(() => positionToggle()).observe(observedContainer);
   }
   document.fonts?.ready?.then(positionToggle);
+  document.addEventListener("astro:page-load", positionToggle);
   positionToggle();
-  for (const delay of [50, 150, 400, 900]) {
+  for (const delay of [50, 150, 400, 900, 1800, 3000]) {
     setTimeout(positionToggle, delay);
   }
 </script>
