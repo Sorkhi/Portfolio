@@ -46,21 +46,34 @@ pnpm dev        # local dev server at http://localhost:4321
 | `pnpm lint` / `pnpm lint:fix` | Biome lint/format check (`:fix` writes changes) |
 | `pnpm deploy` | Build, then `wrangler deploy` to Cloudflare Workers |
 
+## Pages
+
+| Route | What it is |
+|---|---|
+| `/` | Homepage — full-bleed hero, own top/bottom nav (`chrome={false}` on `PageShell`) |
+| `/cv` | In-site Curriculum Vitae — the "registration-grid" framed layout, see `CLAUDE.md` |
+
+Navigating between them is a client-side swap (`ClientRouter` / View Transitions), not a full
+page load — see "View Transitions" below before adding any script to a page.
+
 ## Project structure
 
 ```
 src/
   content/
-    projects/<slug>/        # case studies — index.mdx + local assets/
+    projects/<slug>/        # case studies — index.mdx + local assets/ (not built yet)
   components/
-    primitives/              # Button, Rule, Frame, Cursor — small, reused, mostly static
-    motion/                  # PortfolioMark, Reveal, ThemeToggle — anything that animates
-    layout/                  # Header, Footer, PageShell (document shell)
+    primitives/              # Button, Rule, Frame, Cursor, DiamondList, SectionHeading,
+                              # RadarChart, AreaChart, SocialIcons — small, reused, mostly static
+    motion/                   # PortfolioMark, Reveal, ThemeToggle — anything that animates
+    layout/                   # Header, Footer, PageShell, CvGrid, CvColumns, cv-marks.ts
   styles/
     tokens.css                # single source of truth for color/spacing/type/duration
     base.css                  # reset + element defaults
   lib/
-    motion/                   # gsap/Lenis setup + the withMotion() reduced-motion wrapper
+    motion/                   # gsap/Lenis setup, the withMotion() reduced-motion wrapper,
+                               # and onPageReady() — see "View Transitions" below
+    cv-data.ts                 # CV page content (a one-off page, not a content collection)
   pages/
 public/
   fonts/                     # (reserved) subset woff2, if manual subsetting is added later
@@ -73,6 +86,26 @@ value, px size, or duration.
 
 All GSAP/Lenis usage goes through `withMotion()` in `src/lib/motion/`, which centralizes the
 `prefers-reduced-motion` check so no component has to handle it individually.
+
+## View Transitions
+
+`PageShell` renders `<ClientRouter />`, so navigating between pages is a client-side DOM swap, not
+a full reload. A `<script>` that sets up listeners with a plain top-level call only ever runs
+once — it will not reattach after the reader navigates away and back. **Always** wrap that kind of
+setup in `onPageReady()` (`src/lib/motion/on-page-ready.ts`) instead of calling `onIdle()` (or
+nothing) directly:
+
+```ts
+import { onPageReady } from "@/lib/motion/on-page-ready";
+
+onPageReady(async () => {
+  // re-runs after every navigation, including the first
+});
+```
+
+See `CLAUDE.md`'s guardrail 5 for the two failure modes already hit once (double-firing on first
+load, and stale listeners piling up on `window`/`document` across repeat visits) and how each
+script in this repo avoids them.
 
 ## Content collections
 
@@ -110,6 +143,13 @@ pnpm deploy
 
 This runs `astro build` then `wrangler deploy`. It requires `wrangler login` to have been run
 once on the deploying machine (credentials are cached locally, not stored in this repo).
+
+**`pnpm preview` leaves `wrangler`/`workerd` processes running** even after the command appears to
+exit — a subsequent `pnpm build` will fail with `EPERM` on `dist/client` because those processes
+still hold the directory open. If that happens, kill them first (Windows: find the PIDs bound to
+port 8787 and the `wrangler dev` node process, then `taskkill /PID <pid> /F` each one — `wrangler`
+respawns its `workerd` child automatically, so kill the parent too, not just `workerd.exe`) before
+building again.
 
 ## Working conventions
 
