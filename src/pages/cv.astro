@@ -1,0 +1,623 @@
+---
+import { Image } from "astro:assets";
+import profilePhoto from "@/assets/cv/CV-Profile-Illustration.webp";
+import CvColumns from "@/components/layout/CvColumns.astro";
+import CvGrid from "@/components/layout/CvGrid.astro";
+import PageShell from "@/components/layout/PageShell.astro";
+import AreaChart from "@/components/primitives/AreaChart.astro";
+import DiamondList from "@/components/primitives/DiamondList.astro";
+import Frame from "@/components/primitives/Frame.astro";
+import RadarChart from "@/components/primitives/RadarChart.astro";
+import SectionHeading from "@/components/primitives/SectionHeading.astro";
+import SocialIcons from "@/components/primitives/SocialIcons.astro";
+import {
+  aboutMe,
+  contact,
+  creativeStudios,
+  education,
+  hobbies,
+  ielts,
+  languages,
+  membership,
+  social,
+  softSkills,
+  specialities,
+  tools,
+  workBehavior,
+  workExperience,
+  workshops,
+} from "@/lib/cv-data";
+
+export const prerender = true;
+---
+
+<PageShell
+  title="Saeid Sorkhi — Curriculum Vitae"
+  description="Curriculum Vitae of Saeid Sorkhi — researcher, visual communication expert, and digital designer. Education, experience, skills, and specialities."
+  chrome={false}
+  theme="light"
+>
+  <div class="cv" data-theme="light" data-cv>
+    <Frame fixed={false} edgeTicks={false} />
+
+    <a href="/" class="cv__back" aria-label="Back to home">
+      ←
+    </a>
+
+    <div class="cv__content">
+      <CvGrid>
+        <Fragment slot="title">
+          <p class="cv__kicker"><b>C</b>URRICULUM <b>V</b>ITAE</p>
+          <Image src={profilePhoto} alt="Saeid Sorkhi" class="cv__photo" width={480} height={480} quality={90} loading="eager" />
+        </Fragment>
+
+        <Fragment slot="about">
+          <SectionHeading>About Me</SectionHeading>
+          <p class="cv__body">{aboutMe}</p>
+        </Fragment>
+
+        <Fragment slot="contact">
+          <SectionHeading>Contact</SectionHeading>
+          <DiamondList class="cv__contact-list">
+            {
+              contact.map((item) => (
+                <li>
+                  <b>{item.label}</b>{" "}
+                  {item.href ? (
+                    <a href={item.href} target={item.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
+                      {item.value}
+                    </a>
+                  ) : (
+                    item.value
+                  )}
+                </li>
+              ))
+            }
+          </DiamondList>
+          <SectionHeading class="cv__social-heading">Social Media</SectionHeading>
+          <SocialIcons items={social} />
+        </Fragment>
+
+        <Fragment slot="education">
+          <SectionHeading>Education</SectionHeading>
+          <DiamondList class="cv__edu-list">
+            {
+              education.map((item) => (
+                <li>
+                  <div class="cv__edu-head">
+                    <p class="cv__edu-degree">{item.degree}</p>
+                    <p class="cv__edu-years">{item.years}</p>
+                  </div>
+                  <p class="cv__edu-school">{item.school}</p>
+                  <p class="cv__edu-detail">{item.detail}</p>
+                  <p class="cv__edu-thesis">
+                    <b>Thesis:</b> {item.thesis}
+                  </p>
+                </li>
+              ))
+            }
+          </DiamondList>
+        </Fragment>
+
+        <Fragment slot="specialities">
+          <SectionHeading>Specialities</SectionHeading>
+          <RadarChart points={specialities} />
+        </Fragment>
+
+        <Fragment slot="behavior">
+          <SectionHeading as="h3">Work Behavior Assessment</SectionHeading>
+          <p class="cv__behavior-type">
+            {workBehavior.type} <span class="cv__behavior-source">via {workBehavior.source}</span>
+          </p>
+          <div class="cv__traits">
+            {workBehavior.traits.map((trait) => <span class="cv__trait">{trait}</span>)}
+          </div>
+          <p class="cv__behavior-summary">{workBehavior.summary}</p>
+        </Fragment>
+
+        <Fragment slot="hobbies">
+          <SectionHeading as="h3">Hobbies</SectionHeading>
+          <ul class="cv__hobbies">
+            {hobbies.map((hobby) => <li>{hobby}</li>)}
+          </ul>
+        </Fragment>
+
+        <Fragment slot="languages">
+          <SectionHeading>Languages</SectionHeading>
+          <div class="cv__lang-list">
+            {
+              languages.map((lang) => (
+                <div class="cv__lang-item">
+                  <div class="cv__lang-head">
+                    <p class="cv__lang-name">
+                      {lang.name}: <span class="cv__lang-detail">{lang.detail}</span>
+                    </p>
+                    <div class="cv__meter" aria-hidden="true">
+                      {Array.from({ length: lang.max }, (_, i) => (
+                        <span class:list={["cv__meter-dot", i < Math.floor(lang.level) ? "is-filled" : i < lang.level ? "is-half" : ""]}>◆</span>
+                      ))}
+                    </div>
+                  </div>
+                  {lang.name === "English" && (
+                    <p class="cv__ielts">
+                      <b>IELTS</b> Overall Score: <b>{ielts.overall}</b> — L: {ielts.listening} | R: {ielts.reading} | W: {ielts.writing} | S:{" "}
+                      {ielts.speaking}
+                    </p>
+                  )}
+                </div>
+              ))
+            }
+          </div>
+        </Fragment>
+
+        <Fragment slot="softskills">
+          <SectionHeading>Soft Skills</SectionHeading>
+          <AreaChart points={softSkills} />
+        </Fragment>
+      </CvGrid>
+
+      <CvColumns>
+        <Fragment slot="col1">
+          <SectionHeading>Work Experience</SectionHeading>
+          <DiamondList class="cv__exp-list">
+            {
+              workExperience.map((item) => (
+                <li>
+                  <p class="cv__exp-role">{item.role}</p>
+                  <p class="cv__exp-org">{item.org}</p>
+                  <p class="cv__exp-years">{item.years}</p>
+                  {item.detail && <p class="cv__exp-detail">{item.detail}</p>}
+                </li>
+              ))
+            }
+          </DiamondList>
+        </Fragment>
+
+        <Fragment slot="col2">
+          <SectionHeading>Creative Studios</SectionHeading>
+          <DiamondList class="cv__exp-list">
+            {
+              creativeStudios.map((item) => (
+                <li>
+                  <p class="cv__exp-role">{item.role}</p>
+                  <p class="cv__exp-org">{item.org}</p>
+                  <p class="cv__exp-years">{item.years}</p>
+                </li>
+              ))
+            }
+          </DiamondList>
+
+          <SectionHeading class="cv__col-heading--spaced">Membership &amp; Activities</SectionHeading>
+          <DiamondList class="cv__exp-list">
+            {
+              membership.map((item) => (
+                <li>
+                  <p class="cv__exp-org">{item.org}</p>
+                  {item.sub && <p class="cv__exp-detail">{item.sub}</p>}
+                  <p class="cv__exp-role">
+                    {item.role} <span class="cv__exp-years">{item.years}</span>
+                  </p>
+                  {item.extra && (
+                    <p class="cv__exp-role">
+                      {item.extra.role} <span class="cv__exp-years">{item.extra.years}</span>
+                    </p>
+                  )}
+                </li>
+              ))
+            }
+          </DiamondList>
+
+          <SectionHeading class="cv__col-heading--spaced">Tools and Technologies</SectionHeading>
+          <ul class="cv__tools">
+            {tools.map((tool) => <li>{tool}</li>)}
+          </ul>
+        </Fragment>
+
+        <Fragment slot="col3">
+          <SectionHeading>Workshops &amp; Courses</SectionHeading>
+          <DiamondList class="cv__exp-list">
+            {
+              workshops.map((item) => (
+                <li>
+                  <p class="cv__exp-role">{item.title}</p>
+                  <p class="cv__exp-org">{item.org}</p>
+                  {item.detail && <p class="cv__exp-detail">{item.detail}</p>}
+                  <p class="cv__exp-years">{item.date}</p>
+                </li>
+              ))
+            }
+          </DiamondList>
+        </Fragment>
+      </CvColumns>
+    </div>
+  </div>
+</PageShell>
+
+<script>
+  import { onPageReady } from "@/lib/motion/on-page-ready";
+
+  // Each re-run (see onPageReady) targets a fresh set of elements after a
+  // ClientRouter swap, but the *previous* run's ScrollTriggers are still
+  // registered against the now-detached old ones unless explicitly killed
+  // — left alone they'd pile up across repeat visits to this page. A
+  // refresh afterwards is what makes GSAP actually re-measure trigger
+  // positions against the swapped-in layout; without it, triggers created
+  // on a second+ visit can end up checking stale geometry and never fire.
+  let scrollTriggers: import("gsap/ScrollTrigger").ScrollTrigger[] = [];
+
+  onPageReady(async () => {
+    for (const st of scrollTriggers) st.kill();
+    scrollTriggers = [];
+
+    const rows = new Map<string, { lines: HTMLElement[]; marks: HTMLElement[]; cells: HTMLElement[] }>();
+    for (const el of document.querySelectorAll<HTMLElement>("[data-cv-row]")) {
+      const row = el.dataset.cvRow;
+      if (!row) continue;
+      if (!rows.has(row)) rows.set(row, { lines: [], marks: [], cells: [] });
+      const bucket = rows.get(row)!;
+      if (el.hasAttribute("data-cv-line")) bucket.lines.push(el);
+      else if (el.hasAttribute("data-cv-mark")) bucket.marks.push(el);
+      else if (el.hasAttribute("data-cv-cell")) bucket.cells.push(el);
+    }
+    if (rows.size === 0) return;
+
+    const { withMotion, ScrollTrigger } = await import("@/lib/motion");
+
+    withMotion(({ gsap, reduced }) => {
+      // Reduced motion: everything stays in its normal, fully-visible,
+      // non-scaled state — the setup below only runs for the animated case.
+      if (reduced) return;
+
+      const isVertical = (el: HTMLElement) => el.classList.contains("cv-grid__divider--v") || el.classList.contains("cv-columns__divider--v");
+
+      for (const { lines, marks, cells } of rows.values()) {
+        const verticals = lines.filter(isVertical);
+        const horizontals = lines.filter((el) => !isVertical(el));
+
+        gsap.set(horizontals, { scaleX: 0, transformOrigin: "left" });
+        gsap.set(verticals, { scaleY: 0, transformOrigin: "top" });
+        gsap.set(marks, { opacity: 0 });
+        gsap.set(cells, { opacity: 0, y: 10 });
+
+        // Fires once, as the row's own topmost element crosses well into
+        // the viewport from below — never re-hides on scrolling back up
+        // (toggleActions' last three "none"s), so this is a one-time
+        // reveal per row, not something scrubbed to live scroll position.
+        const trigger = cells[0] ?? lines[0];
+        if (!trigger) continue;
+
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger, start: "top 88%", toggleActions: "play none none none" },
+        });
+        if (tl.scrollTrigger) scrollTriggers.push(tl.scrollTrigger);
+
+        // A real, felt trim-in: the row's boundary rule sweeps in first,
+        // its verticals grow down out of that line, then (once every line
+        // meeting at a junction has actually arrived) the marks appear,
+        // and last the content itself settles in.
+        tl.to(horizontals, { scaleX: 1, duration: 0.55, stagger: 0.06, ease: "power2.out" })
+          .to(verticals, { scaleY: 1, duration: 0.5, stagger: 0.05, ease: "power2.out" }, "-=0.35")
+          .to(marks, { opacity: 1, duration: 0.25, stagger: 0.02, ease: "power1.out" }, "-=0.15")
+          .to(cells, { opacity: 1, y: 0, duration: 0.45, stagger: 0.06, ease: "power2.out" }, "-=0.1");
+      }
+
+      ScrollTrigger.refresh();
+    });
+  });
+</script>
+
+<style>
+  .cv {
+    position: relative;
+    min-height: 100dvh;
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    overflow-x: clip;
+  }
+
+  /* Stretches to the same lines as the site frame's own corner marks
+     (--frame-margin, all four sides) rather than a centered, narrower
+     content column with its own separate top offset — the grid is meant to
+     visibly start and end right at that frame, not float inside it. */
+  .cv__content {
+    position: relative;
+    z-index: 1;
+    padding: var(--frame-margin);
+  }
+
+  /* Sits directly on the site frame's own top-left corner mark instead of
+     inside the title cell's content flow — a fixed landmark at the frame
+     itself, not competing with the kicker/photo for space. */
+  .cv__back {
+    position: absolute;
+    top: var(--frame-margin);
+    left: var(--frame-margin);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    background-color: var(--color-fg);
+    color: var(--color-bg);
+    text-decoration: none;
+    font-size: var(--text-md);
+    line-height: 1;
+    transition: background-color var(--duration-base) var(--ease-out);
+  }
+
+  .cv__back:hover {
+    background-color: var(--color-accent);
+  }
+
+  /* --- Title / photo -------------------------------------------------- */
+  .cv__kicker {
+    font-size: var(--text-lg);
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    margin-bottom: var(--space-4);
+  }
+
+  .cv__kicker b {
+    font-weight: 700;
+  }
+
+  .cv__photo {
+    width: 100%;
+    max-width: 11rem;
+    /* The <img>'s own width/height HTML attributes (480/480, for a sharp
+       2x source) otherwise win over aspect-ratio for the *height* half —
+       width gets overridden above, but with no CSS height at all the
+       attribute's 480px stood, stretching the box tall instead of square. */
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    /* Thinner than the grid's own dividers (--rule-width-cv) — a quiet
+       frame around the photo itself, not another registration line. */
+    border: var(--rule-width) solid var(--color-border);
+  }
+
+  /* --- About / body text ------------------------------------------------ */
+  .cv__body {
+    margin-top: var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: 300;
+    line-height: var(--leading-relaxed);
+  }
+
+  .cv__body :global(b) {
+    font-weight: 700;
+  }
+
+  /* --- Contact / social -------------------------------------------------- */
+  /* :global() throughout this block is load-bearing, not decorative: these
+     classes are passed as a prop into <DiamondList>/<SectionHeading>, so
+     the <ul>/<h2> they land on carries THAT component's Astro scope
+     attribute, never this file's. An unscoped `.cv__contact-list { }` here
+     compiles to `.cv__contact-list[data-astro-cid-cv] { }` and silently
+     never matches anything — :global() is what makes it apply at all. */
+  /* .cv__contact-list.cv__contact-list (repeated) beats DiamondList's own
+     scoped `.diamond-list[data-astro-cid] { gap }` on specificity — a plain
+     single global class loses that tie-break since the component's own
+     attribute-scoped selector counts as two selectors, not one. */
+  :global(.cv__contact-list.cv__contact-list) {
+    margin-top: var(--space-6);
+    gap: var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: 300;
+    line-height: var(--leading-tight);
+  }
+
+  :global(.cv__contact-list a) {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--duration-base) var(--ease-out);
+  }
+
+  :global(.cv__contact-list a:hover) {
+    color: var(--color-accent);
+  }
+
+  :global(.cv__social-heading) {
+    margin-top: var(--space-8);
+  }
+
+  /* --- Education ------------------------------------------------------ */
+  :global(.cv__edu-list) {
+    margin-top: var(--space-6);
+  }
+
+  .cv__edu-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .cv__edu-degree {
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  .cv__edu-years {
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    white-space: nowrap;
+  }
+
+  .cv__edu-school,
+  .cv__edu-detail,
+  .cv__edu-thesis {
+    font-size: var(--text-xs);
+    font-weight: 300;
+    margin-top: var(--space-1);
+  }
+
+  .cv__edu-school {
+    font-weight: 700;
+  }
+
+  /* --- Specialities / Soft Skills chart wrappers ----------------------- */
+  .cv__content :global(.radar),
+  .cv__content :global(.area) {
+    margin-top: var(--space-4);
+  }
+
+  /* --- Work behavior ---------------------------------------------------- */
+  .cv__behavior-type {
+    margin-top: var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  .cv__behavior-source {
+    font-weight: 300;
+    color: var(--color-muted);
+  }
+
+  .cv__traits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+
+  .cv__trait {
+    padding: 0.15em var(--space-2);
+    background-color: var(--color-chip-bg);
+    color: var(--color-accent);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+  }
+
+  .cv__behavior-summary {
+    margin-top: var(--space-3);
+    font-size: var(--text-xs);
+    font-weight: 300;
+    line-height: var(--leading-relaxed);
+    color: var(--color-muted);
+  }
+
+  /* --- Hobbies ----------------------------------------------------------- */
+  .cv__hobbies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    margin-top: var(--space-4);
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-sm);
+    font-weight: 300;
+  }
+
+  .cv__hobbies li:not(:last-child)::after {
+    content: "·";
+    margin-left: var(--space-4);
+    color: var(--color-border);
+  }
+
+  /* --- Languages ---------------------------------------------------------- */
+  .cv__lang-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    margin-top: var(--space-4);
+  }
+
+  .cv__lang-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .cv__lang-name {
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  .cv__lang-detail {
+    font-weight: 300;
+  }
+
+  .cv__meter {
+    display: flex;
+    gap: var(--space-1);
+    font-size: var(--text-sm);
+  }
+
+  .cv__meter-dot {
+    color: var(--color-border);
+  }
+
+  .cv__meter-dot.is-filled {
+    color: var(--color-accent);
+  }
+
+  .cv__meter-dot.is-half {
+    color: var(--color-accent);
+    opacity: 0.35;
+  }
+
+  .cv__ielts {
+    margin-top: var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: 300;
+    color: var(--color-muted);
+  }
+
+  /* Same cross-component scoping note as the Contact block above applies
+     to both of these — :global() required. */
+  :global(.cv__col-heading--spaced) {
+    margin-top: var(--space-12);
+  }
+
+  :global(.cv__exp-list) {
+    margin-top: var(--space-4);
+    font-size: var(--text-xs);
+  }
+
+  .cv__exp-role {
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .cv__exp-org {
+    margin-top: var(--space-1);
+    font-weight: 300;
+  }
+
+  .cv__exp-years {
+    margin-top: var(--space-1);
+    color: var(--color-accent);
+    font-weight: 300;
+  }
+
+  .cv__exp-detail {
+    margin-top: var(--space-1);
+    color: var(--color-muted);
+    font-weight: 300;
+  }
+
+  .cv__tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-xs);
+  }
+
+  .cv__tools li {
+    padding: var(--space-1) var(--space-2);
+    border: var(--rule-width) solid var(--color-border);
+    font-weight: 300;
+    transition: background-color var(--duration-base) var(--ease-out);
+  }
+
+  .cv__tools li:hover {
+    background-color: var(--color-border);
+  }
+</style>

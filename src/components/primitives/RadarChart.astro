@@ -1,0 +1,166 @@
+---
+// Server-rendered radar/spider chart (Specialities). Pure geometry computed
+// at build time — no client JS, so it costs nothing against the LCP/zero-JS
+// budget. Colors come only from design tokens (CLAUDE.md guardrail #1).
+interface Props {
+  points: { label: string; value: number }[];
+  class?: string;
+}
+
+const { points, class: className } = Astro.props;
+
+const SIZE = 480;
+const CX = SIZE / 2;
+// Centered so the chart's actual content (ring + axis labels) tightly fills
+// the viewBox top-to-bottom — CY used to sit well below center, leaving a
+// large dead-space band above the ring that read as an oversized gap
+// between the "Specialities" heading and the chart itself.
+const CY = 152;
+const RADIUS = 108;
+const RINGS = [0.25, 0.5, 0.75, 1];
+const LABEL_GAP = 14;
+const MAX_LINE_CHARS = 15;
+
+const n = points.length;
+
+function angleFor(i: number) {
+  return -90 + i * (360 / n);
+}
+
+function toXY(angleDeg: number, r: number) {
+  const rad = (angleDeg * Math.PI) / 180;
+  return { x: CX + r * Math.cos(rad), y: CY + r * Math.sin(rad) };
+}
+
+function wrap(label: string): string[] {
+  const words = label.split(" ");
+  const lines: string[] = [];
+  let current = "";
+  for (const word of words) {
+    const next = current ? `${current} ${word}` : word;
+    if (next.length > MAX_LINE_CHARS && current) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = next;
+    }
+  }
+  if (current) lines.push(current);
+  return lines.slice(0, 2);
+}
+
+const ringPolygons = RINGS.map((ring) =>
+  Array.from({ length: n }, (_, i) => toXY(angleFor(i), RADIUS * ring))
+    .map((p) => `${p.x},${p.y}`)
+    .join(" "),
+);
+
+const spokes = Array.from({ length: n }, (_, i) => toXY(angleFor(i), RADIUS));
+
+// Small tick squares on the outer ring itself, one per axis — each rotated
+// to its own axis angle rather than a single uniform diamond, so they read
+// like little registration ticks around the boundary rather than a
+// decoration stamped on regardless of position.
+const outerTicks = Array.from({ length: n }, (_, i) => ({
+  ...toXY(angleFor(i), RADIUS),
+  angle: angleFor(i),
+}));
+
+const dataPolygon = points.map((p, i) => ({
+  ...toXY(angleFor(i), RADIUS * p.value),
+  angle: angleFor(i),
+}));
+const dataPolygonStr = dataPolygon.map((p) => `${p.x},${p.y}`).join(" ");
+
+const labels = points.map((p, i) => {
+  const angle = angleFor(i);
+  const rad = (angle * Math.PI) / 180;
+  const cos = Math.cos(rad);
+  const sin = Math.sin(rad);
+  const pos = toXY(angle, RADIUS + LABEL_GAP);
+  const lines = wrap(p.label);
+
+  let anchor: "start" | "middle" | "end" = "middle";
+  if (cos > 0.35) anchor = "start";
+  else if (cos < -0.35) anchor = "end";
+
+  // Nudge multi-line labels so the block sits centered on the axis tip
+  // rather than growing downward past it.
+  const lineHeight = 13;
+  const blockOffset =
+    sin > 0.6
+      ? 0
+      : sin < -0.6
+        ? -(lines.length - 1) * lineHeight
+        : -((lines.length - 1) * lineHeight) / 2;
+
+  return { x: pos.x, y: pos.y + blockOffset, anchor, lines };
+});
+---
+
+<svg class:list={["radar", className]} viewBox={`0 0 ${SIZE} 300`} role="img" aria-label="Specialities radar chart">
+  <desc>{points.map((p) => `${p.label}: ${Math.round(p.value * 100)}%`).join(", ")}</desc>
+
+  {ringPolygons.map((poly) => <polygon points={poly} class="radar__ring" />)}
+
+  {spokes.map((p) => <line x1={CX} y1={CY} x2={p.x} y2={p.y} class="radar__spoke" />)}
+
+  {outerTicks.map((p) => <rect x={p.x - 3} y={p.y - 3} width="6" height="6" transform={`rotate(${p.angle} ${p.x} ${p.y})`} class="radar__tick" />)}
+
+  <polygon points={dataPolygonStr} class="radar__data" />
+
+  {dataPolygon.map((p) => <rect x={p.x - 3} y={p.y - 3} width="6" height="6" transform={`rotate(${p.angle} ${p.x} ${p.y})`} class="radar__vertex" />)}
+
+  {
+    labels.map((label) => (
+      <text x={label.x} y={label.y} text-anchor={label.anchor} class="radar__label">
+        {label.lines.map((line, i) => (
+          <tspan x={label.x} dy={i === 0 ? 0 : 13}>
+            {line}
+          </tspan>
+        ))}
+      </text>
+    ))
+  }
+</svg>
+
+<style>
+  .radar {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .radar__ring {
+    fill: none;
+    stroke: var(--color-border);
+    stroke-width: 1;
+  }
+
+  .radar__spoke {
+    stroke: var(--color-border);
+    stroke-width: 1;
+  }
+
+  .radar__data {
+    fill: var(--color-accent-glow);
+    stroke: var(--color-accent);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+
+  .radar__vertex {
+    fill: var(--color-accent);
+  }
+
+  .radar__tick {
+    fill: var(--color-border);
+  }
+
+  .radar__label {
+    fill: var(--color-fg);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 400;
+  }
+</style>

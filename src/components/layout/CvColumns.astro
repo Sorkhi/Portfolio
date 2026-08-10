@@ -1,0 +1,131 @@
+---
+// The page-2 section (Work Experience / Creative Studios / Workshops) as a
+// direct continuation of CvGrid's own registration lines, not an unrelated
+// even-thirds layout dropped in below it. Its two column dividers sit at
+// the exact same x as CvGrid's seamB (35.21%) and seamC (67.37%) — seamB in
+// particular is the *same physical line* continuing down from row2/row3
+// above, so the boundary between this component and CvGrid reads as one
+// grid, not two stacked ones.
+//
+// Same seam-track technique as CvGrid: a top seam-row carries the boundary
+// rule + junction marks against CvGrid above, a bottom seam-row carries the
+// closing rule + junction marks where the internal dividers end (the outer
+// corners there are the site Frame's own, same reasoning as CvGrid).
+import { type Dir, markMargin, markPath } from "./cv-marks";
+
+// Column lines (content-relative %): 0 [c1] 35.21 [c2] 67.37 [c3] 100
+const seam1 = "2 / 3"; // x=35.21% — continues CvGrid's seamB
+const seam2 = "4 / 5"; // x=67.37% — new here, doesn't continue from row3
+
+const seamTop = "1 / 2";
+const seamBottom = "3 / 4";
+
+const junctions: [string, string, string, string, Dir[]][] = [
+  // boundary with CvGrid above
+  ["1 / 2", seamTop, "start", "center", ["up", "down", "right"]],
+  [seam1, seamTop, "center", "center", ["up", "down", "left", "right"]],
+  [seam2, seamTop, "center", "center", ["down", "left", "right"]],
+  ["5 / 6", seamTop, "end", "center", ["up", "down", "left"]],
+  // closing rule at the very bottom
+  [seam1, seamBottom, "center", "center", ["up", "left", "right"]],
+  [seam2, seamBottom, "center", "center", ["up", "left", "right"]],
+];
+---
+
+<div class="cv-columns">
+  <div class="cv-columns__cell" data-cv-cell data-cv-row="4" style="grid-column: 1 / 2; grid-row: 2 / 3;"><slot name="col1" /></div>
+  <div class="cv-columns__cell" data-cv-cell data-cv-row="4" style="grid-column: 3 / 4; grid-row: 2 / 3;"><slot name="col2" /></div>
+  <div class="cv-columns__cell" data-cv-cell data-cv-row="4" style="grid-column: 5 / 6; grid-row: 2 / 3;"><slot name="col3" /></div>
+
+  <div class="cv-columns__divider cv-columns__divider--v" data-cv-line data-cv-row="4" style={`grid-column: ${seam1}; grid-row: 1 / 4;`} aria-hidden="true"></div>
+  <div class="cv-columns__divider cv-columns__divider--v" data-cv-line data-cv-row="4" style={`grid-column: ${seam2}; grid-row: 1 / 4;`} aria-hidden="true"></div>
+  <div class="cv-columns__divider cv-columns__divider--v" data-cv-line data-cv-row="4" style="grid-column: 1 / 2; grid-row: 1 / 4; justify-self: start;" aria-hidden="true"></div>
+  <div class="cv-columns__divider cv-columns__divider--v" data-cv-line data-cv-row="4" style="grid-column: 5 / 6; grid-row: 1 / 4; justify-self: end;" aria-hidden="true"></div>
+
+  <div class="cv-columns__divider cv-columns__divider--h" data-cv-line data-cv-row="4" style={`grid-row: ${seamTop}; grid-column: 1 / 6;`} aria-hidden="true"></div>
+  <div class="cv-columns__divider cv-columns__divider--h" data-cv-line data-cv-row="4" style={`grid-row: ${seamBottom}; grid-column: 1 / 6;`} aria-hidden="true"></div>
+
+  {
+    junctions.map(([col, row, justify, align, dirs]) => (
+      <svg
+        class="cv-columns__mark"
+        data-cv-mark
+        data-cv-row="4"
+        style={`grid-column: ${col}; grid-row: ${row}; justify-self: ${justify}; align-self: ${align}; ${markMargin(justify, align)}`}
+        viewBox="0 0 28 28"
+        aria-hidden="true"
+      >
+        <path d={markPath(dirs)} />
+      </svg>
+    ))
+  }
+</div>
+
+<style>
+  .cv-columns {
+    display: grid;
+    grid-template-columns: 35.21% 0 32.16% 0 32.63%;
+    grid-template-rows: 0 auto 0;
+    position: relative;
+  }
+
+  .cv-columns__cell {
+    min-width: 0;
+    padding: var(--space-8);
+  }
+
+  .cv-columns__divider {
+    background-color: var(--color-border);
+  }
+
+  .cv-columns__divider--v {
+    width: var(--rule-width-cv);
+  }
+
+  .cv-columns__divider--h {
+    height: var(--rule-width-cv);
+    align-self: center;
+  }
+
+  .cv-columns__mark {
+    position: relative;
+    z-index: 1;
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: none;
+    stroke: var(--color-fg);
+    stroke-width: 1.5;
+    stroke-linecap: square;
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* Continues CvGrid's mobile rectangle — left/right borders pick straight
+     up where its own left off (no gap between the two components), a top
+     border replaces the seamTop divider (hidden below along with the rest
+     of the internal marks) so the boundary with CvGrid above doesn't just
+     vanish, and a bottom border closes it off right at the site frame's
+     bl/br corners, since this is the last section on the page. */
+  @media (max-width: 56rem) {
+    .cv-columns {
+      display: flex;
+      flex-direction: column;
+      border-top: var(--rule-width-cv) solid var(--color-border);
+      border-left: var(--rule-width-cv) solid var(--color-border);
+      border-right: var(--rule-width-cv) solid var(--color-border);
+      border-bottom: var(--rule-width-cv) solid var(--color-border);
+    }
+
+    .cv-columns__divider,
+    .cv-columns__mark {
+      display: none;
+    }
+
+    .cv-columns__cell {
+      padding: var(--space-6) var(--space-4);
+    }
+
+    .cv-columns__cell + .cv-columns__cell {
+      border-top: var(--rule-width-cv) solid var(--color-border);
+    }
+  }
+</style>

@@ -1,0 +1,99 @@
+---
+import px500Raw from "@/assets/cv/500px-icon.svg?raw";
+import linkedinRaw from "@/assets/cv/Linkedin-icon.svg?raw";
+import xRaw from "@/assets/cv/X-icon.svg?raw";
+// Real platform marks (provided as monochrome SVGs), recolored via
+// currentColor so they stay themable black/red like the rest of the site
+// instead of shipping each brand's own color.
+import behanceRaw from "@/assets/cv/behance-icon.svg?raw";
+import dribbbleRaw from "@/assets/cv/dribbble-icon.svg?raw";
+import instagramRaw from "@/assets/cv/instagram-icon.svg?raw";
+import type { SocialPlatform } from "@/lib/cv-data";
+
+interface Props {
+  items: { platform: SocialPlatform; handle: string; href: string }[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props;
+
+const icon: Record<SocialPlatform, string> = {
+  linkedin: linkedinRaw,
+  behance: behanceRaw,
+  instagram: instagramRaw,
+  twitter: xRaw,
+  px500: px500Raw,
+  dribbble: dribbbleRaw,
+};
+
+const label: Record<SocialPlatform, string> = {
+  linkedin: "LinkedIn",
+  behance: "Behance",
+  instagram: "Instagram",
+  twitter: "X",
+  px500: "500px",
+  dribbble: "Dribbble",
+};
+---
+
+<ul class:list={["social", className]}>
+  {
+    items.map((item) => (
+      <li>
+        <a href={item.href} target="_blank" rel="noreferrer" aria-label={`${label[item.platform]} ${item.handle}`}>
+          <span class="social__icon" aria-hidden="true" set:html={icon[item.platform]} />
+          <span class="social__handle">{item.handle}</span>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .social {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    gap: 0 var(--space-6);
+    list-style: none;
+    padding: 0;
+  }
+
+  .social a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    /* The inherited body line-height (1.5) was the real source of the loose
+       vertical rhythm — the flex `gap` above was already small, but each
+       row's own text line-height was adding far more space beneath it. */
+    line-height: 1.3;
+    text-decoration: none;
+    color: var(--color-fg);
+    transition: color var(--duration-base) var(--ease-out);
+  }
+
+  .social a:hover {
+    color: var(--color-accent);
+  }
+
+  .social__icon {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .social__icon :global(svg) {
+    display: block;
+    width: auto;
+    height: 0.85em;
+    fill: currentColor;
+  }
+
+  .social__handle {
+    font-size: var(--text-xs);
+    font-weight: 200;
+    color: var(--color-muted);
+  }
+
+  .social a:hover .social__handle {
+    color: var(--color-accent);
+  }
+</style>

@@ -1,0 +1,36 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<ul class:list={["diamond-list", className]}>
+  <slot />
+</ul>
+
+<style>
+  .diamond-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    list-style: none;
+    padding: 0;
+  }
+
+  .diamond-list > :global(li) {
+    position: relative;
+    padding-left: var(--space-4);
+  }
+
+  .diamond-list > :global(li)::before {
+    content: "◆";
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+    font-size: 0.6em;
+    line-height: inherit;
+    top: 0.5em;
+  }
+</style>

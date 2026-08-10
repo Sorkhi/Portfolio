@@ -1,0 +1,198 @@
+---
+import { type Dir, markMargin, markPath } from "./cv-marks";
+
+// The CV registration-grid, replicating the printed CV's actual box
+// proportions (measured pixel-for-pixel from the reference PDF) — NOT a
+// uniform 3-column grid. Row 1's column breaks (22.42% / 72.20%) are
+// different from row 2 and row 3's shared breaks (35.21% / 67.37%).
+//
+// Junction marks are NOT a uniform "+" glyph. Each mark is built from only
+// the line segments that actually meet at that point — a T-junction (3
+// lines) reads as a T; the one genuine 4-way crossing (languages/soft-skills
+// divider crossing the row2/row3 rule) reads as a "+" because it actually is
+// one — never as a default shape stamped down regardless of topology.
+//
+// This grid has no corner marks of its own: its outer edges are set (in
+// cv.astro) to land exactly on --frame-margin, the same line the site
+// Frame's own fixed corner brackets sit on, so that frame *is* this grid's
+// frame rather than a second one stacked underneath it.
+//
+// Built as one fine CSS Grid with "seam" tracks (0-sized) at every distinct
+// boundary — column seams so each row can span whichever real columns it
+// needs, row seams so marks/dividers land exactly between auto-height rows
+// without knowing their rendered height in advance.
+//
+// `data-cv-row` groups every cell/line/mark for the scroll-reveal script in
+// cv.astro — each group animates in together as the reader scrolls to it.
+//
+// Column lines (content-relative %): 0 [c1] 22.42 [c2] 35.21 [c3] 67.37 [c4] 72.20 [c5] 100
+// Row lines: r1(auto) / r2a(auto) [behavior] / r2b(auto) [hobbies] / r3(auto)
+const seamA = "2 / 3"; // x=22.42% — row1 title|about
+const seamB = "4 / 5"; // x=35.21% — row2/3 col1|col2 (shared)
+const seamC = "6 / 7"; // x=67.37% — row2 col2|col3
+const seamD = "8 / 9"; // x=72.20% — row1 about|contact
+
+const seamR1 = "2 / 3"; // row1 / row2 boundary
+const seamR2 = "4 / 5"; // behavior / hobbies split (col3 only)
+const seamR3 = "6 / 7"; // row2 / row3 boundary
+
+// Junctions: [gridColumn, gridRow, justifySelf, alignSelf, directions, revealRow]
+const junctions: [string, string, string, string, Dir[], number][] = [
+  // top perimeter (the two true corners are the site Frame's own — no marks
+  // of this grid's own belong there)
+  [seamA, "1 / 2", "center", "start", ["down", "left", "right"], 1],
+  [seamD, "1 / 2", "center", "start", ["down", "left", "right"], 1],
+  // row1 / row2 boundary — revealed with row2, the later (lower) of the two
+  // rows whose lines actually form this junction
+  ["1 / 2", seamR1, "start", "center", ["up", "down", "right"], 2],
+  [seamA, seamR1, "center", "center", ["up", "left", "right"], 2],
+  [seamB, seamR1, "center", "center", ["down", "left", "right"], 2],
+  [seamC, seamR1, "center", "center", ["down", "left", "right"], 2],
+  [seamD, seamR1, "center", "center", ["up", "left", "right"], 2],
+  ["9 / 10", seamR1, "end", "center", ["up", "down", "left"], 2],
+  // behavior / hobbies split
+  [seamC, seamR2, "center", "center", ["up", "down", "right"], 2],
+  ["9 / 10", seamR2, "end", "center", ["up", "down", "left"], 2],
+  // row2 / row3 boundary — revealed with row3
+  ["1 / 2", seamR3, "start", "center", ["up", "down", "right"], 3],
+  [seamB, seamR3, "center", "center", ["up", "down", "left", "right"], 3],
+  [seamC, seamR3, "center", "center", ["up", "left", "right"], 3],
+  ["9 / 10", seamR3, "end", "center", ["up", "down", "left"], 3],
+  // row3's own divider (languages | soft skills) continues to the very
+  // bottom of this grid and on into CvColumns below — the boundary between
+  // them (and its own junction marks) is CvColumns' concern, since it's
+  // the one that knows what its own columns look like on the other side.
+];
+---
+
+<div class="cv-grid">
+  <div class="cv-grid__cell" data-cv-cell data-cv-row="1" style="grid-column: 1 / 2; grid-row: 1 / 2;"><slot name="title" /></div>
+  <div class="cv-grid__cell" data-cv-cell data-cv-row="1" style="grid-column: 3 / 8; grid-row: 1 / 2;"><slot name="about" /></div>
+  <div class="cv-grid__cell" data-cv-cell data-cv-row="1" style="grid-column: 9 / 10; grid-row: 1 / 2;"><slot name="contact" /></div>
+
+  <div class="cv-grid__cell" data-cv-cell data-cv-row="2" style="grid-column: 1 / 4; grid-row: 3 / 6;"><slot name="education" /></div>
+  <div class="cv-grid__cell" data-cv-cell data-cv-row="2" style="grid-column: 5 / 6; grid-row: 3 / 6;"><slot name="specialities" /></div>
+  <div class="cv-grid__cell" data-cv-cell data-cv-row="2" style="grid-column: 7 / 10; grid-row: 3 / 4;"><slot name="behavior" /></div>
+  <div class="cv-grid__cell" data-cv-cell data-cv-row="2" style="grid-column: 7 / 10; grid-row: 5 / 6;"><slot name="hobbies" /></div>
+
+  <div class="cv-grid__cell" data-cv-cell data-cv-row="3" style="grid-column: 1 / 4; grid-row: 7 / 8;"><slot name="languages" /></div>
+  <div class="cv-grid__cell" data-cv-cell data-cv-row="3" style="grid-column: 5 / 10; grid-row: 7 / 8;"><slot name="softskills" /></div>
+
+  <!-- verticals -->
+  <div class="cv-grid__divider cv-grid__divider--v" data-cv-line data-cv-row="1" style={`grid-column: ${seamA}; grid-row: 1 / 3;`} aria-hidden="true"></div>
+  <div class="cv-grid__divider cv-grid__divider--v" data-cv-line data-cv-row="1" style={`grid-column: ${seamD}; grid-row: 1 / 3;`} aria-hidden="true"></div>
+  <div class="cv-grid__divider cv-grid__divider--v" data-cv-line data-cv-row="2" style={`grid-column: ${seamB}; grid-row: 2 / 8;`} aria-hidden="true"></div>
+  <div class="cv-grid__divider cv-grid__divider--v" data-cv-line data-cv-row="2" style={`grid-column: ${seamC}; grid-row: 2 / 7;`} aria-hidden="true"></div>
+  <div class="cv-grid__divider cv-grid__divider--v" data-cv-line data-cv-row="1" style="grid-column: 1 / 2; grid-row: 1 / 8; justify-self: start;" aria-hidden="true"></div>
+  <div class="cv-grid__divider cv-grid__divider--v" data-cv-line data-cv-row="1" style="grid-column: 9 / 10; grid-row: 1 / 8; justify-self: end;" aria-hidden="true"></div>
+
+  <!-- horizontals -->
+  <div class="cv-grid__divider cv-grid__divider--h" data-cv-line data-cv-row="1" style="grid-row: 1 / 2; grid-column: 1 / 10; align-self: start;" aria-hidden="true"></div>
+  <div class="cv-grid__divider cv-grid__divider--h" data-cv-line data-cv-row="2" style={`grid-row: ${seamR1}; grid-column: 1 / 10;`} aria-hidden="true"></div>
+  <div class="cv-grid__divider cv-grid__divider--h" data-cv-line data-cv-row="2" style={`grid-row: ${seamR2}; grid-column: 7 / 10;`} aria-hidden="true"></div>
+  <div class="cv-grid__divider cv-grid__divider--h" data-cv-line data-cv-row="3" style={`grid-row: ${seamR3}; grid-column: 1 / 10;`} aria-hidden="true"></div>
+
+  {
+    junctions.map(([col, row, justify, align, dirs, revealRow]) => (
+      <svg
+        class="cv-grid__mark"
+        data-cv-mark
+        data-cv-row={revealRow}
+        style={`grid-column: ${col}; grid-row: ${row}; justify-self: ${justify}; align-self: ${align}; ${markMargin(justify, align)}`}
+        viewBox="0 0 28 28"
+        aria-hidden="true"
+      >
+        <path d={markPath(dirs)} />
+      </svg>
+    ))
+  }
+</div>
+
+<style>
+  .cv-grid {
+    display: grid;
+    grid-template-columns: 22.42% 0 12.79% 0 32.16% 0 4.83% 0 27.8%;
+    grid-template-rows: auto 0 auto 0 auto 0 auto;
+    align-items: stretch;
+    position: relative;
+  }
+
+  /* Generous, uniform inset on every side — with the page margin itself so
+     small, each cell's content needs its own clear air from the lines
+     around it or the whole grid reads as one dense block. */
+  .cv-grid__cell {
+    min-width: 0;
+    padding: var(--space-8);
+  }
+
+  /* Title/photo cell: kicker + photo read as one centered unit rather than
+     two independently-placed pieces. */
+  .cv-grid__cell:first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .cv-grid__divider {
+    background-color: var(--color-border);
+  }
+
+  .cv-grid__divider--v {
+    width: var(--rule-width-cv);
+  }
+
+  .cv-grid__divider--h {
+    height: var(--rule-width-cv);
+    align-self: center;
+  }
+
+  .cv-grid__mark {
+    position: relative;
+    z-index: 1;
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: none;
+    stroke: var(--color-fg);
+    stroke-width: 1.5;
+    stroke-linecap: square;
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* Mobile: collapse to a single stacked column in reading order. The fine
+     internal registration marks have no meaning once nothing is
+     side-by-side, so those go — but the outer rectangle stays: a left/right/
+     top border (CSS border, not the grid-item divs above, which rely on
+     grid placement that a flex layout doesn't have) picks up right where
+     the site frame's own top corners sit, and each cell's own border-top
+     reaches that same left/right edge as it crosses. */
+  @media (max-width: 56rem) {
+    .cv-grid {
+      display: flex;
+      flex-direction: column;
+      border-top: var(--rule-width-cv) solid var(--color-border);
+      border-left: var(--rule-width-cv) solid var(--color-border);
+      border-right: var(--rule-width-cv) solid var(--color-border);
+    }
+
+    .cv-grid__divider,
+    .cv-grid__mark {
+      display: none;
+    }
+
+    .cv-grid__cell {
+      padding: var(--space-6) var(--space-4);
+    }
+
+    /* Extra clearance so the kicker doesn't crowd the back-arrow sitting
+       just above it at the frame's corner. */
+    .cv-grid__cell:first-child {
+      padding-top: var(--space-12);
+    }
+
+    .cv-grid__cell + .cv-grid__cell {
+      border-top: var(--rule-width-cv) solid var(--color-border);
+    }
+  }
+</style>

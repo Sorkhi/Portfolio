@@ -1,5 +1,6 @@
 ---
 import "@fontsource-variable/jetbrains-mono";
+import { ClientRouter } from "astro:transitions";
 import jetbrainsMonoWoff2 from "@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url";
 import "@/styles/tokens.css";
 import "@/styles/base.css";
@@ -13,16 +14,25 @@ interface Props {
   chrome?: boolean;
   /** Path under public/ used for og:image / twitter:image link previews. */
   image?: string;
+  /**
+   * Locks <html> (and so `<body>`'s var(--color-bg)) to one theme regardless
+   * of stored preference or OS setting — for pages whose own content is
+   * already hard-locked to a theme (e.g. the CV, always light). Without
+   * this, body/html keep whatever theme the OS prefers while the page's own
+   * light-locked content sits on top, so overscroll/rubber-band scrolling
+   * can flash the *other* theme's background past the page's edges.
+   */
+  theme?: "light" | "dark";
 }
 
-const { title, description, chrome = true, image = "/social-preview.png" } = Astro.props;
+const { title, description, chrome = true, image = "/social-preview.png", theme } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const socialImageURL = new URL(image, Astro.site);
 ---
 
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-theme={theme} data-theme-locked={theme ? "true" : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -46,8 +56,10 @@ const socialImageURL = new URL(image, Astro.site);
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImageURL} />
+    <ClientRouter />
     <script is:inline>
       (function () {
+        if (document.documentElement.hasAttribute("data-theme-locked")) return;
         var stored = localStorage.getItem("theme");
         var theme =
           stored === "light" || stored === "dark"
