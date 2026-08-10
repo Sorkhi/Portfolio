@@ -2,17 +2,6 @@
 // source). Kept as a plain data module, not a content collection — this is
 // one fixed page, not a repeatable content type.
 
-export const aboutMe =
-  "I was born in Gerash, Iran, and have always been passionate about Design. I pursued my " +
-  "interest in this field by obtaining a bachelor's degree in Architectural Design and a " +
-  "master's degree in Visual Communication, both of which have allowed me to develop a deep " +
-  "understanding of different Design Approaches and Techniques. Through my specialized " +
-  "education, I have become skilled at conducting design research and using my findings to " +
-  "create visually appealing and effective designs. Throughout my academic career, I became " +
-  "increasingly interested in Visual Culture and Visual Identity. Understanding how people " +
-  "perceive and interact with visual stimuli has become a central focus of my work, and I am " +
-  "constantly exploring new ways to create effective and meaningful designs.";
-
 export const contact = [
   { label: "Website", value: "www.Sorkhi.com", href: "https://www.sorkhi.com" },
   { label: "Phone", value: "+98 939 506 5181", href: "tel:+989395065181" },

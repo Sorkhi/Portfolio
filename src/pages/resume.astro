@@ -1,6 +1,4 @@
 ---
-import { Image } from "astro:assets";
-import profilePhoto from "@/assets/cv/CV-Profile-Illustration.webp";
 import CvColumns from "@/components/layout/CvColumns.astro";
 import CvGrid from "@/components/layout/CvGrid.astro";
 import PageShell from "@/components/layout/PageShell.astro";
@@ -11,7 +9,6 @@ import RadarChart from "@/components/primitives/RadarChart.astro";
 import SectionHeading from "@/components/primitives/SectionHeading.astro";
 import SocialIcons from "@/components/primitives/SocialIcons.astro";
 import {
-  aboutMe,
   contact,
   creativeStudios,
   education,
@@ -32,8 +29,8 @@ export const prerender = true;
 ---
 
 <PageShell
-  title="Saeid Sorkhi — Curriculum Vitae"
-  description="Curriculum Vitae of Saeid Sorkhi — researcher, visual communication expert, and digital designer. Education, experience, skills, and specialities."
+  title="Saeid Sorkhi — Resume"
+  description="Resume of Saeid Sorkhi — researcher, visual communication expert, and digital designer. Education, experience, skills, and specialities."
   chrome={false}
   theme="light"
 >
@@ -47,13 +44,28 @@ export const prerender = true;
     <div class="cv__content">
       <CvGrid>
         <Fragment slot="title">
-          <p class="cv__kicker"><b>C</b>URRICULUM <b>V</b>ITAE</p>
-          <Image src={profilePhoto} alt="Saeid Sorkhi" class="cv__photo" width={480} height={480} quality={90} loading="eager" />
+          <div class="cv__photo-frame">
+            <p class="cv__kicker">RESUME</p>
+            {/* Plain <img>, not astro:assets Image — the build's image
+                transform pipeline was flattening this photo's transparent
+                background onto opaque gray on resize/format conversion.
+                Serving the already-small (80KB) source webp directly from
+                public/ keeps the real alpha channel intact. */}
+            <img src="/resume/profile.webp" alt="Saeid Sorkhi" class="cv__photo" width="1254" height="1254" loading="eager" />
+          </div>
         </Fragment>
 
         <Fragment slot="about">
-          <SectionHeading>About Me</SectionHeading>
-          <p class="cv__body">{aboutMe}</p>
+          <SectionHeading>Profile</SectionHeading>
+          <p class="cv__body">
+            I'm <b class="cv__body-name">Saeid Sorkhi</b>, a Visual Designer with <b>15+ years of experience</b> across
+            visual identity, branding, graphic design, motion, and digital experiences. With an interdisciplinary academic
+            background in <b>Architecture and Visual Communication</b>, I combine design research, cultural insight,
+            visual strategy, and strategic thinking to develop <b>clear, distinctive, and scalable visual systems</b>.
+            My professional experience spans publishing, corporate and cultural branding, advertising, UI/UX, motion
+            graphics, digital design, and multidisciplinary creative projects, with a particular interest in the
+            intersection of <b>visual culture, identity, communication, and human-centered design</b>.
+          </p>
         </Fragment>
 
         <Fragment slot="contact">
@@ -350,31 +362,51 @@ export const prerender = true;
     background-color: var(--color-accent);
   }
 
-  /* --- Title / photo -------------------------------------------------- */
-  .cv__kicker {
-    font-size: var(--text-lg);
-    font-weight: 300;
-    letter-spacing: 0.04em;
-    margin-bottom: var(--space-4);
+  /* --- Title / photo --------------------------------------------------
+     A layered composition, not two stacked centered pieces: RESUME sits
+     behind the photo (the transparent margin above the subject's head in
+     the source image is what lets it show through), and the photo itself
+     bleeds past the cell's own padding to touch the cell's left/right/
+     bottom edges — negative margins matching that padding exactly. It
+     stays *behind* the grid's own divider lines with no z-index needed:
+     CvGrid draws dividers after cells in DOM order, so a later sibling
+     already paints over content bleeding out of an earlier one. */
+  .cv__photo-frame {
+    position: relative;
+    width: 100%;
+    /* Without this, the photo's own margin-top collapses straight through
+       this frame (position: relative doesn't prevent that) and pushes the
+       frame itself down instead of creating a gap the kicker can sit in —
+       flow-root opens a new block formatting context so the margin stays
+       "inside" the frame like it visually needs to. */
+    display: flow-root;
   }
 
-  .cv__kicker b {
+  .cv__kicker {
+    position: absolute;
+    top: var(--space-6);
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    font-size: clamp(2.75rem, 2rem + 3vw, 4rem);
     font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--color-accent);
+    white-space: nowrap;
   }
 
   .cv__photo {
-    width: 100%;
-    max-width: 11rem;
-    /* The <img>'s own width/height HTML attributes (480/480, for a sharp
-       2x source) otherwise win over aspect-ratio for the *height* half —
-       width gets overridden above, but with no CSS height at all the
-       attribute's 480px stood, stretching the box tall instead of square. */
+    position: relative;
+    display: block;
+    width: calc(100% + 2 * var(--space-8));
+    /* base.css puts max-width: 100% on every image as a responsive default
+       — exactly what the bleed above needs to escape here. */
+    max-width: none;
     height: auto;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    /* Thinner than the grid's own dividers (--rule-width-cv) — a quiet
-       frame around the photo itself, not another registration line. */
-    border: var(--rule-width) solid var(--color-border);
+    margin-top: var(--space-12);
+    margin-right: calc(var(--space-8) * -1);
+    margin-bottom: calc(var(--space-8) * -1);
+    margin-left: calc(var(--space-8) * -1);
   }
 
   /* --- About / body text ------------------------------------------------ */
@@ -387,6 +419,10 @@ export const prerender = true;
 
   .cv__body :global(b) {
     font-weight: 700;
+  }
+
+  .cv__body :global(b.cv__body-name) {
+    color: var(--color-accent);
   }
 
   /* --- Contact / social -------------------------------------------------- */
@@ -619,5 +655,35 @@ export const prerender = true;
 
   .cv__tools li:hover {
     background-color: var(--color-border);
+  }
+
+  /* CvGrid's mobile cell padding is space-4 horizontal / space-6 vertical
+     (not the uniform space-8 desktop uses) — the photo's bleed margins
+     have to match whichever padding is actually in effect, or it either
+     stops short of the cell edge or overshoots past it. */
+  @media (max-width: 56rem) {
+    .cv__kicker {
+      /* ~55% larger than the previous mobile size (was clamp(3.5rem…5.5rem)). */
+      font-size: clamp(5.25rem, 3.75rem + 7vw, 8rem);
+      top: var(--space-4);
+    }
+
+    .cv__photo {
+      width: calc(100% + 2 * var(--space-4));
+      margin-top: var(--space-6);
+      margin-right: calc(var(--space-4) * -1);
+      margin-bottom: calc(var(--space-6) * -1);
+      margin-left: calc(var(--space-4) * -1);
+      /* A modest crop, not a hard "fit the box" one: only enough to trim
+         the excess if the head would otherwise reach past the box's own
+         top line, not the aggressive 3:2 that used to remove most of the
+         head and hide the title outright. object-position anchored to the
+         bottom keeps the shoulders/bottom edge (already flush with the
+         box) untouched and takes any crop off the top instead. */
+      aspect-ratio: 1 / 1;
+      height: auto;
+      object-fit: cover;
+      object-position: center bottom;
+    }
   }
 </style>
