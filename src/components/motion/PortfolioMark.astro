@@ -211,9 +211,9 @@ const yearRest = String(year).slice(2);
 </script>
 
 <script>
-  import { onIdle } from "@/lib/motion/on-idle";
+  import { onPageReady } from "@/lib/motion/on-page-ready";
 
-  onIdle(async () => {
+  onPageReady(async () => {
     const toggle = document.querySelector<HTMLButtonElement>("[data-mark-toggle]");
     const dot = document.querySelector<SVGCircleElement>("[data-mark-dot]");
     const hero = document.querySelector<HTMLElement>("[data-hero]");

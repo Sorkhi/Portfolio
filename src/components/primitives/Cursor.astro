@@ -92,12 +92,23 @@
 </style>
 
 <script>
-  import { onIdle } from "@/lib/motion/on-idle";
+  import { onPageReady } from "@/lib/motion/on-page-ready";
 
-  onIdle(async () => {
+  // window itself survives navigations (unlike wrap/blobs, which are fresh
+  // elements every time onPageReady's callback re-runs after a ClientRouter
+  // swap), so each re-run's pointermove/pointerleave listeners must replace
+  // the previous run's rather than pile up next to them — an
+  // AbortController tears the old pair down in one call.
+  let controller: AbortController | undefined;
+
+  onPageReady(async () => {
     const wrap = document.querySelector<HTMLElement>("[data-cursor-blob-wrap]");
     const blobs = document.querySelectorAll<HTMLElement>("[data-cursor-blob]");
+
+    controller?.abort();
     if (!wrap || blobs.length === 0 || window.matchMedia("(pointer: coarse)").matches) return;
+    controller = new AbortController();
+    const { signal } = controller;
 
     const { withMotion } = await import("@/lib/motion");
 
@@ -115,17 +126,25 @@
         y: gsap.quickTo(el, "y", { duration: 0.28 + i * 0.22, ease: "power2.out" }),
       }));
 
-      window.addEventListener("pointermove", (event) => {
-        wrap.style.opacity = "1";
-        for (const mover of movers) {
-          mover.x(event.clientX);
-          mover.y(event.clientY);
-        }
-      });
+      window.addEventListener(
+        "pointermove",
+        (event) => {
+          wrap.style.opacity = "1";
+          for (const mover of movers) {
+            mover.x(event.clientX);
+            mover.y(event.clientY);
+          }
+        },
+        { signal },
+      );
 
-      window.addEventListener("pointerleave", () => {
-        wrap.style.opacity = "0";
-      });
+      window.addEventListener(
+        "pointerleave",
+        () => {
+          wrap.style.opacity = "0";
+        },
+        { signal },
+      );
     });
   });
 </script>

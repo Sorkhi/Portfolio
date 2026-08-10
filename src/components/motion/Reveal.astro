@@ -13,10 +13,12 @@ const { as: Tag = "div", class: className } = Astro.props;
 
 <script>
   // GSAP + plugins are ~140kb — never let them sit on the critical path.
-  // Fetch and init only once the browser is idle after first paint.
-  import { onIdle } from "@/lib/motion/on-idle";
+  // Fetch and init only once the browser is idle after first paint. Runs
+  // again on every ClientRouter (view transitions) navigation too, not
+  // just the first load — see onPageReady's own docs for why that matters.
+  import { onPageReady } from "@/lib/motion/on-page-ready";
 
-  onIdle(async () => {
+  onPageReady(async () => {
     const { withMotion } = await import("@/lib/motion");
     const elements = document.querySelectorAll<HTMLElement>("[data-reveal]");
 
