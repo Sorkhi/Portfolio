@@ -60,18 +60,22 @@ src/
     cv-data.ts            # one-off page data (not a content collection — see below)
   pages/
     index.astro           # homepage
-    cv.astro               # in-site Curriculum Vitae (built; see "registration-grid" below)
+    resume.astro           # in-site Resume (built; see "registration-grid" below)
 public/
   fonts/                 # woff2 only, subset
+  resume/                # profile photo, served unprocessed — see guardrail 3's exception
 ```
 
 Rules:
 - A component that animates lives in `components/motion/`, never inline in a page.
 - Anything imported by more than two components moves to `primitives/`.
 - Project media that is small and page-specific lives beside its MDX. Large video goes to R2.
-- A page with fixed, one-off content (the CV) gets a plain `src/lib/<page>-data.ts` module, not a
-  content collection — collections are for *repeatable* content types (projects). Don't reach for
-  `content.config.ts` for a page that only ever has one instance of itself.
+- A page with fixed, one-off content (the Resume page) gets a plain `src/lib/<page>-data.ts`
+  module, not a content collection — collections are for *repeatable* content types (projects).
+  Don't reach for `content.config.ts` for a page that only ever has one instance of itself. The
+  underlying data module is still named `cv-data.ts` (predates the page's rename to Resume) —
+  not worth a mechanical rename on its own, but new one-off page data files should be named after
+  their page, not this one.
 
 ---
 
@@ -97,6 +101,13 @@ final state — it just arrives instantly.
 - GSAP, Lenis, and any video are lazy-initialised after the first fold.
 - Fonts: woff2 only, subset, `font-display: swap`, `preload` on the display weight only.
 - Images through `astro:assets` (AVIF + WebP). No raw `<img src>` for local assets.
+  **Exception, confirmed as a real bug, not a style choice:** the Cloudflare `imageService:
+  "compile"` transform pipeline flattens transparent PNG/WebP source images onto an opaque
+  background when it resizes/re-encodes them (confirmed by sampling pixel alpha before vs. after
+  — 0 on disk, 255 out of `<Image>`). Any image whose transparency must survive (like the Resume
+  page's profile photo) has to skip the pipeline: put the already-optimized file in `public/` and
+  reference it with a plain `<img src="/...">` instead of `astro:assets`. Don't "fix" this by
+  routing it back through `<Image>` — re-verify the bug is still there before assuming otherwise.
 
 ### 4. Accessibility
 - Theme switching respects `prefers-color-scheme` as the default; user choice persists in `localStorage`.
@@ -151,18 +162,19 @@ Adding a theme = adding one block of token overrides. It must never require touc
 
 A page can also **lock** its theme regardless of stored preference or OS setting, via
 `<PageShell theme="light">` (or `"dark"`) — for content that's only ever designed in one theme
-(the homepage hero, the CV). This server-renders `data-theme` directly on `<html>` and guards the
-inline bootstrap script from overwriting it. **Always use this** instead of only setting
-`data-theme` on a page's own wrapper div when a page is theme-locked — without it, `<body>` keeps
-following the OS/stored preference while the page's own content sits on top locked to the other
-theme, and elastic/rubber-band overscroll on some browsers flashes the mismatched background past
-the page's edges (this shipped once as a real bug on the CV page before being caught).
+(the homepage hero, the Resume page). This server-renders `data-theme` directly on `<html>` and
+guards the inline bootstrap script from overwriting it. **Always use this** instead of only
+setting `data-theme` on a page's own wrapper div when a page is theme-locked — without it,
+`<body>` keeps following the OS/stored preference while the page's own content sits on top locked
+to the other theme, and elastic/rubber-band overscroll on some browsers flashes the mismatched
+background past the page's edges (this shipped once as a real bug on the Resume page before being
+caught).
 
 ---
 
-## The registration-grid system (CV page; reusable for any framed multi-column layout)
+## The registration-grid system (Resume page; reusable for any framed multi-column layout)
 
-The CV page (`src/pages/cv.astro`, `src/components/layout/CvGrid.astro` +
+The Resume page (`src/pages/resume.astro`, `src/components/layout/CvGrid.astro` +
 `CvColumns.astro`) established a general pattern for laying out a page as boxes divided by
 faint registration lines, with the *site's own* corner-bracket language (`Frame.astro`) reused
 for the marks at every line intersection — not a separate decorative system bolted on top. Reach
@@ -173,7 +185,7 @@ next one that will need it.
 **How it fits together:**
 - `Frame.astro` takes two props for this use: `fixed={false}` makes it position itself against
   its nearest positioned ancestor's *actual content height* instead of the viewport — for a page
-  taller than one screen (the CV), this is what makes the bottom corner marks sit at the page's
+  taller than one screen (the Resume page), this is what makes the bottom corner marks sit at the page's
   true end, only reached once you've scrolled there, instead of hovering mid-content. `edgeTicks={false}`
   drops Frame's own mid-edge tick marks, for pages whose *own* internal grid already has marks
   along that same edge (so the two don't collide/duplicate).
@@ -204,7 +216,7 @@ next one that will need it.
   using unrelated proportions (even column-thirds) that happen to sit nearby — see `CvColumns.astro`'s
   header comment for why its columns are 35.21% / 32.16% / 32.63%, not an even split.
 - Every script this system needs (draw-in animation, etc.) **must** go through `onPageReady` (see
-  guardrail 5 above) — the CV page's reveal animation shipped broken on second navigation before
+  guardrail 5 above) — the Resume page's reveal animation shipped broken on second navigation before
   that was in place.
 
 ---
@@ -252,29 +264,42 @@ attribute handling before writing the content, not after.
 
 ---
 
+## Next up: Resume page enhancements (not built yet, no spec agreed)
+
+The user has said the Resume page is good enough for now, but flagged two future additions —
+**do not scaffold either until asked**, this is just a record so it isn't lost:
+- A **Publishing** section (content/placement not yet specified — ask when this is picked up).
+- **Logos** (courses/certifications and past workplaces/studios) placed next to each entry in the
+  three bottom `CvColumns` columns (Work Experience, Creative Studios + Membership + Tools,
+  Workshops & Courses) — i.e. a company/institution mark alongside each `DiamondList` item, not
+  just the plain text currently there. Will need a small logo-asset set (probably SVG, monochrome
+  to match the rest of the page's palette per guardrail 1) gathered before this is buildable.
+
+---
+
 ## Next up: Projects detail page (spec agreed, not built yet)
 
-The user wants this prepped for a future session, following the CV page's established
+The user wants this prepped for a future session, following the Resume page's established
 conventions — **do not scaffold or build the actual page until asked.** This section is the
 brief for when that session starts.
 
 **Layout:** a single viewport-height page (`Frame` in its **default `fixed={true}` mode** — this
-is not a tall scrolling page like the CV, so the site frame stays pinned to the viewport, same as
+is not a tall scrolling page like the Resume page, so the site frame stays pinned to the viewport, same as
 the homepage), split into two columns inside that frame:
 
 - **Left column — fixed, narrower width, does not scroll.** Contains, top to bottom: project
   title, description (the case-study body/summary), tools used, client name, design year. Reuse
   `SectionHeading` for the sub-labels and `DiamondList` for enumerable bits (tools), matching the
-  CV page's own chip/diamond-bullet treatment — don't invent a new heading style for this page.
+  Resume page's own chip/diamond-bullet treatment — don't invent a new heading style for this page.
 - **Right column — scrollable, contained within the frame.** Project images stacked vertically,
   scrolling *inside* that column (`overflow-y: auto` on the column itself) while the left column
-  and the outer frame stay fixed in place. This is the opposite of the CV page's own scroll model
+  and the outer frame stay fixed in place. This is the opposite of the Resume page's own scroll model
   (there, the *whole page* scrolls and Frame follows via `fixed={false}`) — here Frame stays truly
   fixed and only the gallery column scrolls internally.
 - Use the **registration-grid system** documented above for the frame/divider/junction-mark
   treatment between the two columns — a vertical divider at the column boundary, with junction
   marks (via `cv-marks.ts`) wherever it meets the top/bottom of the frame. This is a much simpler
-  case than the CV grid (two columns, no internal row-splits), so it likely doesn't need its own
+  case than the Resume page's grid (two columns, no internal row-splits), so it likely doesn't need its own
   `CvGrid`-style component — work out whether a small dedicated layout component or inline markup
   in the page itself is more appropriate once actually building it.
 

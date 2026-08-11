@@ -51,7 +51,7 @@ pnpm dev        # local dev server at http://localhost:4321
 | Route | What it is |
 |---|---|
 | `/` | Homepage — full-bleed hero, own top/bottom nav (`chrome={false}` on `PageShell`) |
-| `/cv` | In-site Curriculum Vitae — the "registration-grid" framed layout, see `CLAUDE.md` |
+| `/resume` | In-site Resume — the "registration-grid" framed layout, see `CLAUDE.md` |
 
 Navigating between them is a client-side swap (`ClientRouter` / View Transitions), not a full
 page load — see "View Transitions" below before adding any script to a page.
