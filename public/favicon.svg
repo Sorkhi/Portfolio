@@ -1,12 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>Sorkhi</title>
   <style>
-    rect { fill: #17140f; }
-    text { fill: #fbfaf8; }
+    .tile { fill: #17140f; }
+    .letter { stroke: #fbfaf8; }
+    .period { fill: #ff5b50; }
     @media (prefers-color-scheme: dark) {
-      rect { fill: #f2efe9; }
-      text { fill: #121110; }
+      .tile { fill: #fbfaf8; }
+      .letter { stroke: #17140f; }
+      .period { fill: #d2232a; }
     }
   </style>
-  <rect width="32" height="32" rx="2" />
-  <text x="16" y="22" font-family="monospace" font-size="17" text-anchor="middle">S</text>
+  <rect class="tile" width="32" height="32" rx="2" />
+  <path class="letter" d="M19.5 10.2A7 7 0 0 0 14 8.2c-3.3 0-5.4 1.6-5.4 4 0 2.3 1.6 3.5 5.4 4.3 3.8.8 5.5 2 5.5 4.3 0 2.5-2.1 4-5.5 4-2.4 0-4.7-.8-6.2-2.4" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+  <rect class="period" x="24" y="22" width="4" height="4" />
 </svg>
